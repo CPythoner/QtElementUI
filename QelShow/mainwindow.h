@@ -7,6 +7,7 @@
 
 #include "../QelIcon/QelIconTester.h"
 #include "../QelButton/QelButtonTester.h"
+#include "../QelNumberInput/QelNumberInputTester.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,6 +30,7 @@ private:
     QStackedWidget *pStackedWidget;
     QelIconTester  *pQelIconTester = nullptr;
     QelButtonTester *pQelButtonTester = nullptr;
+    QelNumberInputTester *pQelNumberInputTester = nullptr;
 };
 
 #endif // MAINWINDOW_H
