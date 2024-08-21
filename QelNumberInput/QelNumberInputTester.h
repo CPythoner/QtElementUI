@@ -67,13 +67,13 @@ private:
         QHBoxLayout *sizesLayout = new QHBoxLayout();
 
         QelNumberInput *smallInput = new QelNumberInput(widget, 0, 10, 1, 1);
-        smallInput->setSize(QelNumberInput::Small);
+        smallInput->setSize(QelNumberInput::Size::Small);
 
         QelNumberInput *defaultInput = new QelNumberInput(widget, 0, 10, 2, 1);
-        defaultInput->setSize(QelNumberInput::Default);
+        defaultInput->setSize(QelNumberInput::Size::Default);
 
         QelNumberInput *largeInput = new QelNumberInput(widget, 0, 10, 3, 1);
-        largeInput->setSize(QelNumberInput::Large);
+        largeInput->setSize(QelNumberInput::Size::Large);
 
         sizesLayout->addWidget(smallInput);
         sizesLayout->addWidget(defaultInput);
@@ -92,14 +92,14 @@ private:
         QLabel *label = new QLabel(labelText, widget);
         QHBoxLayout *controlsLayout = new QHBoxLayout();
 
-//        QelNumberInput *leftInput = new QelNumberInput(widget, 0, 10, 1, 1);
-//        leftInput->setControlsPosition(QelNumberInput::ControlsPosition::Left);
+        QelNumberInput *leftInput = new QelNumberInput(widget, 0, 10, 1, 1);
+        leftInput->setControlsPosition(QelNumberInput::ControlsPosition::Default);
 
-//        QelNumberInput *rightInput = new QelNumberInput(widget, 0, 10, 1, 1);
-//        rightInput->setControlsPosition(QelNumberInput::ControlsPosition::Right);
+        QelNumberInput *rightInput = new QelNumberInput(widget, 0, 10, 1, 1);
+        rightInput->setControlsPosition(QelNumberInput::ControlsPosition::Right);
 
-//        controlsLayout->addWidget(leftInput);
-//        controlsLayout->addWidget(rightInput);
+        controlsLayout->addWidget(leftInput);
+        controlsLayout->addWidget(rightInput);
 
         layout->addWidget(label);
         layout->addLayout(controlsLayout);
@@ -115,13 +115,13 @@ private:
         QHBoxLayout *sizesLayout = new QHBoxLayout();
 
         QelNumberInput *smallInput = new QelNumberInput(widget, 0, 10, 1, 1, false, false, false);
-        smallInput->setSize(QelNumberInput::Small);
+        smallInput->setSize(QelNumberInput::Size::Small);
 
         QelNumberInput *defaultInput = new QelNumberInput(widget, 0, 10, 2, 1, false, false, false);
-        defaultInput->setSize(QelNumberInput::Default);
+        defaultInput->setSize(QelNumberInput::Size::Default);
 
         QelNumberInput *largeInput = new QelNumberInput(widget, 0, 10, 3, 1, false, false, false);
-        largeInput->setSize(QelNumberInput::Large);
+        largeInput->setSize(QelNumberInput::Size::Large);
 
         sizesLayout->addWidget(smallInput);
         sizesLayout->addWidget(defaultInput);

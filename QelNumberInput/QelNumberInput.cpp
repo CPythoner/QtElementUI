@@ -2,6 +2,7 @@
 
 #include <QEvent>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QPainter>
 #include <QStyleOption>
 #include <limits>
@@ -16,6 +17,7 @@ QelNumberInput::QelNumberInput(QWidget *parent,
                                bool readonly,
                                bool disabled,
                                bool controls,
+                               ControlsPosition controlsPosition,  // 修改为枚举类型
                                const QString &placeholder)
     : QWidget(parent),
     minValue(minValue),
@@ -25,7 +27,8 @@ QelNumberInput::QelNumberInput(QWidget *parent,
     readonly(readonly),
     disabled(disabled),
     controls(controls),
-    size(Default),
+    controlsPosition(controlsPosition),
+    size(Size::Default),
     precision(0)
 {
     // 创建按钮和显示框
@@ -33,41 +36,29 @@ QelNumberInput::QelNumberInput(QWidget *parent,
     increaseButton = new QPushButton("+", this);
     valueDisplay = new QLineEdit(QString::number(initialValue, 'f', precision), this);
 
-            // 设置默认按钮大小为正方形，并根据 size 设置整体大小
+    // 设置默认按钮大小为正方形，并根据 size 设置整体大小
     setSize(size);
 
-            // 设置 QLineEdit
+    // 设置 QLineEdit
     valueDisplay->setReadOnly(readonly);
     valueDisplay->setAlignment(Qt::AlignCenter);
     valueDisplay->setPlaceholderText(placeholder);
 
-            // 设置按钮和输入框的大小策略
+    // 设置按钮和输入框的大小策略
     decreaseButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     increaseButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     valueDisplay->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-            // 设置样式表，添加圆角，并设置焦点和 hover 样式
-    QString decreaseButtonStyle = "QPushButton { border: 1px solid #dcdfe6; background-color: #f5f7fa; "
-        "border-top-left-radius: 4px; border-bottom-left-radius: 6px; }"
-        "QPushButton:pressed { background-color: #e6e9ef; }"
-        "QPushButton:hover { border-color: #409EFF; color: #409EFF; }";
-    QString increaseButtonStyle = "QPushButton { border: 1px solid #dcdfe6; background-color: #f5f7fa; "
-        "border-top-right-radius: 4px; border-bottom-right-radius: 6px; }"
-        "QPushButton:pressed { background-color: #e6e9ef; }"
-        "QPushButton:hover { border-color: #409EFF; color: #409EFF; }";
-    decreaseButton->setStyleSheet(decreaseButtonStyle);
-    increaseButton->setStyleSheet(increaseButtonStyle);
-
     valueDisplay->setStyleSheet("QLineEdit { border-top: 1px solid #dcdfe6; border-bottom: 1px solid #dcdfe6; "
         "border-left: 0px; border-right: 0px; background-color: white; }");
 
-            // 设置布局
+    // 设置布局
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(decreaseButton);
-    layout->addWidget(valueDisplay);
-    layout->addWidget(increaseButton);
+
+    setControlsPosition(controlsPosition);  // 根据传入参数设置布局
+
     setLayout(layout);
 
             // 连接信号槽
@@ -79,89 +70,116 @@ QelNumberInput::QelNumberInput(QWidget *parent,
     updateControlsState();
 }
 
-bool QelNumberInput::eventFilter(QObject *obj, QEvent *event) {
-    if (event->type() == QEvent::FocusIn) {
-        setStyleSheet("QWidget { border: 1px solid #409EFF; }");
-        qDebug() << "Focus In Event Triggered";
-        return true;
-    } else if (event->type() == QEvent::FocusOut) {
-        setStyleSheet("QWidget { border: 1px solid #dcdfe6; }");
-        qDebug() << "Focus Out Event Triggered";
-        return true;
+void QelNumberInput::setControlsPosition(ControlsPosition position) {
+    controlsPosition = position;
+
+    QString decreaseButtonStyle;
+    QString increaseButtonStyle;
+
+    QLayout *currentLayout = this->layout();
+    if (currentLayout) {
+        delete currentLayout;  // 清除当前布局，防止布局冲突
     }
-    return QWidget::eventFilter(obj, event);
+
+    setSize(size);
+
+    QVBoxLayout *rightLayout = nullptr;
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    if (controlsPosition == ControlsPosition::Right) {
+        decreaseButtonStyle = "QPushButton { border: 1px solid #dcdfe6; background-color: #f5f7fa; "
+            "border-bottom-right-radius: 6px; }"
+            "QPushButton:pressed { background-color: #e6e9ef; }"
+            "QPushButton:hover { border-color: #409EFF; color: #409EFF; }";
+        increaseButtonStyle = "QPushButton { border: 1px solid #dcdfe6; background-color: #f5f7fa; "
+            "border-top-right-radius: 6px; }"
+            "QPushButton:pressed { background-color: #e6e9ef; }"
+            "QPushButton:hover { border-color: #409EFF; color: #409EFF; }";
+        rightLayout = new QVBoxLayout();
+        rightLayout->setSpacing(0);
+        rightLayout->setContentsMargins(0, 0, 0, 0);
+        rightLayout->addWidget(increaseButton);
+        rightLayout->addWidget(decreaseButton);
+        layout->addWidget(valueDisplay);
+        layout->addLayout(rightLayout);
+    } else {
+        decreaseButtonStyle = "QPushButton { border: 1px solid #dcdfe6; background-color: #f5f7fa; "
+            "border-top-left-radius: 6px; border-bottom-left-radius: 6px; }"
+            "QPushButton:pressed { background-color: #e6e9ef; }"
+            "QPushButton:hover { border-color: #409EFF; color: #409EFF; }";
+        increaseButtonStyle = "QPushButton { border: 1px solid #dcdfe6; background-color: #f5f7fa; "
+            "border-top-right-radius: 6px; border-bottom-right-radius: 6px; }"
+            "QPushButton:pressed { background-color: #e6e9ef; }"
+            "QPushButton:hover { border-color: #409EFF; color: #409EFF; }";
+        layout->addWidget(decreaseButton);
+        layout->addWidget(valueDisplay);
+        layout->addWidget(increaseButton);
+    }
+
+    decreaseButton->setStyleSheet(decreaseButtonStyle);
+    increaseButton->setStyleSheet(increaseButtonStyle);
+    setLayout(layout);
 }
 
 void QelNumberInput::setSize(Size size) {
     this->size = size;
-    int buttonSize;
+    int buttonWidth;
+    int buttonHeight;
     int widgetHeight;
-    int widgetWidth;
+    int widgetWidth = 0;
     int fontSize;
 
     switch (size) {
-    case Small:
-        buttonSize = 26;
-        widgetHeight = buttonSize;
-        widgetWidth = buttonSize * 5;
+    case Size::Small:
+        buttonWidth = 26;
+        buttonHeight = buttonWidth; // 默认情况下，按钮是正方形
+        widgetHeight = buttonWidth;
         fontSize = 14;
         break;
-    case Default:
-        buttonSize = 38;
-        widgetHeight = buttonSize;
-        widgetWidth = buttonSize * 5;
+    case Size::Default:
+        buttonWidth = 38;
+        buttonHeight = buttonWidth; // 默认情况下，按钮是正方形
+        widgetHeight = buttonWidth;
         fontSize = 16;
         break;
-    case Large:
-        buttonSize = 42;
-        widgetHeight = buttonSize;
-        widgetWidth = buttonSize * 5;
+    case Size::Large:
+        buttonWidth = 42;
+        buttonHeight = buttonWidth; // 默认情况下，按钮是正方形
+        widgetHeight = buttonWidth;
         fontSize = 18;
         break;
     }
 
-            // 设置加减按钮为正方形，并调整整体大小
-    decreaseButton->setFixedSize(buttonSize, buttonSize);
-    increaseButton->setFixedSize(buttonSize, buttonSize);
-    valueDisplay->setFixedHeight(buttonSize);
-    valueDisplay->setFixedWidth(buttonSize*3);
+    // 如果 controlsPosition 为 LeftRight，则调整按钮的高度为宽度的一半
+    if (controlsPosition == ControlsPosition::Right) {
+        buttonHeight = buttonWidth / 2;
+        widgetHeight = buttonHeight * 2;
+    }
 
-            // 设置按钮的字体大小
+    // 设置加减按钮的大小
+    decreaseButton->setFixedSize(buttonWidth, buttonHeight);
+    increaseButton->setFixedSize(buttonWidth, buttonHeight);
+    valueDisplay->setFixedHeight(buttonWidth);
+
+    // 确保控件的整体宽度合适
+    int displayWidth = buttonWidth * 3;
+    if (controlsPosition == ControlsPosition::Right) {
+        widgetWidth = displayWidth + buttonWidth;
+    } else if (controlsPosition == ControlsPosition::Default) {
+        widgetWidth = buttonWidth * 2 + displayWidth ;
+    }
+
+    setFixedSize(widgetWidth, widgetHeight);  // 设置整个控件的大小
+
+    // 设置按钮的字体大小
     QFont font = decreaseButton->font();
     font.setPointSize(fontSize);
     decreaseButton->setFont(font);
     increaseButton->setFont(font);
-
-    setFixedSize(widgetWidth, widgetHeight);  // 设置整个控件的大小
 }
 
-void QelNumberInput::onFocusIn() {
-    setStyleSheet("QWidget { border: 1px solid #409EFF; }");
-    qDebug() << "onFocusIn";
-}
-
-void QelNumberInput::onFocusOut() {
-    setStyleSheet("QWidget { border: 1px solid #dcdfe6; }");
-}
-
-void QelNumberInput::focusInEvent(QFocusEvent *event) {
-    QWidget::focusInEvent(event);
-    setStyleSheet("QWidget { border: 1px solid #409EFF; }");
-    qDebug() << "onFocusIn";
-}
-
-void QelNumberInput::focusOutEvent(QFocusEvent *event) {
-    QWidget::focusOutEvent(event);
-    setStyleSheet("QWidget { border: 1px solid #dcdfe6; }");
-}
-
-void QelNumberInput::paintEvent(QPaintEvent *event) {
-    QStyleOption opt;
-    opt.initFrom(this);  // 从当前 widget 初始化 opt
-
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-}
 
 double QelNumberInput::value() const {
     return currentValue;
@@ -230,11 +248,6 @@ void QelNumberInput::updateDisplay() {
 }
 
 void QelNumberInput::updateControlsState() {
-    decreaseButton->setVisible(controls);
-    increaseButton->setVisible(controls);
-    if (!controls) {
-        valueDisplay->setFixedWidth(size == Large ? 5 * 42 : size == Default ? 5 * 38 : 5 * 26); // 修改宽度以适应无控制按钮状态
-    }
     decreaseButton->setEnabled(!disabled && controls);
     increaseButton->setEnabled(!disabled && controls);
 }
