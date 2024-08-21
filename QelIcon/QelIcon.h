@@ -796,11 +796,20 @@ private:
         static QString family;
 
         if (!loaded) {
-            int id = QFontDatabase::addApplicationFont(":/fonts/fonts/fontawesome-4.7.0.ttf");
-            if (id != -1) {
-                family = QFontDatabase::applicationFontFamilies(id).at(0);
+            // 尝试从系统中获取 FontAwesome 字体
+            family = "FontAwesome";
+            if (!QFontDatabase::families().contains(family)) {
+                // 如果系统中没有，则从资源文件中加载
+                int id = QFontDatabase::addApplicationFont(":/fonts/fonts/fontawesome-4.7.0.ttf");
+                if (id != -1) {
+                    family = QFontDatabase::applicationFontFamilies(id).at(0);
+                    qDebug() << "FontAwesome font loaded from resource file.";
+                } else {
+                    qWarning() << "Failed to load FontAwesome font from resource file!";
+                    family.clear(); // 如果加载失败，清空 family
+                }
             } else {
-                qWarning() << "Failed to load FontAwesome font!";
+                qDebug() << "FontAwesome font loaded from system.";
             }
             loaded = true;
         }

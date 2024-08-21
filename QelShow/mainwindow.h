@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
-#include "buttonpage.h"
 #include "../QelIcon/QelIconTester.h"
 
 namespace Ui {
@@ -22,7 +21,6 @@ public:
 private:
     Ui::MainWindow *ui;
     QStackedWidget *p_stacked_widget_;
-    ButtonPage     *p_button_page_;
     QelIconTester  *p_qelicon_tester_ = nullptr;
 };
 

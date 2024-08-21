@@ -1,18 +1,15 @@
-#include "qelbutton.h"
 #include <QApplication>
+#include <QMainWindow>
+#include "QelButtonTester.h"
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    qel::QelButton w(NULL,
-                     "Primary",
-                     qel::ButtonSize::Medium,
-                     qel::ButtonType::Primary,
-                     true,
-                     true,
-                     false);
-    w.setText("主要按钮");
-    w.show();
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
 
-    return a.exec();
+    QMainWindow mainWindow;
+    QelButtonTester *tester = new QelButtonTester();
+    mainWindow.setCentralWidget(tester);
+    mainWindow.resize(800, 600);
+    mainWindow.show();
+
+    return app.exec();
 }

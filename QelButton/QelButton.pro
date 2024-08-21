@@ -28,7 +28,11 @@ SOURCES += \
         QelButton.cpp
 
 HEADERS += \
-        QelButton.h
+        QelButton.h \
+        QelButtonTester.h
 
 DISTFILES += \
     QelButton.pri
+
+
+include($$PWD/../QelIcon/QelIcon.pri))

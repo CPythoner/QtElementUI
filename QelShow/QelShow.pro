@@ -25,12 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        buttonpage.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
-        buttonpage.h \
         mainwindow.h
 
 FORMS += \
