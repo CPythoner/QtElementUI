@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = QelFontIcon
+TARGET = QelIcon
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,12 +26,19 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        QelFontIcon.cpp
+        QelIcon.cpp
 
 HEADERS += \
-        QelFontIcon.h
+        QelIcon.h \
+        QelIconTester.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    QelIcon.pri
+
+RESOURCES += \
+    resources.qrc

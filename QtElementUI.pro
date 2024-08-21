@@ -1,4 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    QelFontIcon
+    QelIcon \
+    QelButton   \
+    QelShow
+
