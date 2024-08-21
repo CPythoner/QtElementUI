@@ -765,7 +765,7 @@ public:
         Meetup = 0xf2e0
     };
 
-    QelIcon(Icon icon, int size = 16, const QColor &color = Qt::black)
+    QelIcon(Icon icon, int size = 16, const QColor &color = Qt::gray)
     {
         // 加载 FontAwesome 字体
         static QString fontFamily = loadFontAwesome();
