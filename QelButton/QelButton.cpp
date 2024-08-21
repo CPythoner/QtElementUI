@@ -165,6 +165,7 @@ void QelButton::setLoading(bool isLoading) {
 
 void QelButton::setDisabled(bool isDisabled) {
     setEnabled(!isDisabled);
+    updateButtonStyle();
 }
 
 void QelButton::setIcon(const QIcon &icon) {
@@ -193,57 +194,81 @@ void QelButton::updateButtonStyle() {
             // 根据类型设置样式
     QString backgroundColor;
     QString hoverBackgroundColor;
-    QString textColor = "white";
-    QString hoverTextColor = textColor;
+    QString textColor;
+    QString hoverTextColor;
     QString borderColor;
     QString hoverBorderColor;
+    QString disabledBackgroundColor;
+    QString disabledTextColor;
+    QString disabledBorderColor;
 
     switch (type_) {
     case Primary:
-        backgroundColor = "#409EFF";
+        backgroundColor = isPlain_ ? "#ECF5FF" : "#409EFF";
         hoverBackgroundColor = "#66B1FF";
+        textColor = isPlain_ ? "#409EFF" : "white";
+        hoverTextColor = isPlain_ ? "#409EFF" : "white";
         borderColor = "#409EFF";
         hoverBorderColor = "#66B1FF";
+        disabledBackgroundColor = isPlain_ ? "#F3F8FF" : "#B3D8FF";
+        disabledTextColor = isPlain_ ? "#A0CFFF" : "white";
+        disabledBorderColor = isPlain_ ? "#D6E4FF" : "#B3D8FF";
         break;
     case Success:
-        backgroundColor = "#67C23A";
+        backgroundColor = isPlain_ ? "#F0F9EB" : "#67C23A";
         hoverBackgroundColor = "#85CE61";
+        textColor = isPlain_ ? "#67C23A" : "white";
+        hoverTextColor = isPlain_ ? "#67C23A" : "white";
         borderColor = "#67C23A";
         hoverBorderColor = "#85CE61";
+        disabledBackgroundColor = isPlain_ ? "#F4F7EF" : "#B3E19D";
+        disabledTextColor = isPlain_ ? "#B2E7A9" : "white";
+        disabledBorderColor = isPlain_ ? "#E1EFE3" : "#B3E19D";
         break;
     case Warning:
-        backgroundColor = "#E6A23C";
+        backgroundColor = isPlain_ ? "#FDF6EC" : "#E6A23C";
         hoverBackgroundColor = "#EBB563";
+        textColor = isPlain_ ? "#E6A23C" : "white";
+        hoverTextColor = isPlain_ ? "#E6A23C" : "white";
         borderColor = "#E6A23C";
         hoverBorderColor = "#EBB563";
+        disabledBackgroundColor = isPlain_ ? "#FEF2E5" : "#F3D19E";
+        disabledTextColor = isPlain_ ? "#F1D09C" : "white";
+        disabledBorderColor = isPlain_ ? "#FCE7CE" : "#F3D19E";
         break;
     case Danger:
-        backgroundColor = "#F56C6C";
+        backgroundColor = isPlain_ ? "#FEF0F0" : "#F56C6C";
         hoverBackgroundColor = "#F78989";
+        textColor = isPlain_ ? "#F56C6C" : "white";
+        hoverTextColor = isPlain_ ? "#F56C6C" : "white";
         borderColor = "#F56C6C";
         hoverBorderColor = "#F78989";
+        disabledBackgroundColor = isPlain_ ? "#FEF2F2" : "#FAB6B6";
+        disabledTextColor = isPlain_ ? "#F9B0B0" : "white";
+        disabledBorderColor = isPlain_ ? "#FDE2E2" : "#FAB6B6";
         break;
     case Info:
-        backgroundColor = "#909399";
+        backgroundColor = isPlain_ ? "#F4F4F5" : "#909399";
         hoverBackgroundColor = "#A6A9AD";
+        textColor = isPlain_ ? "#909399" : "white";
+        hoverTextColor = isPlain_ ? "#909399" : "white";
         borderColor = "#909399";
         hoverBorderColor = "#A6A9AD";
+        disabledBackgroundColor = isPlain_ ? "#F6F6F7" : "#C8C9CC";
+        disabledTextColor = isPlain_ ? "#C8C9CC" : "white";
+        disabledBorderColor = isPlain_ ? "#ECECEE" : "#C8C9CC";
         break;
     default:
-        backgroundColor = "#ffffff";
-        hoverBackgroundColor = "#ECF5FF";
-        textColor = "black";
-        hoverTextColor = "#000000";
+        backgroundColor = isPlain_ ? "#ffffff" : "#ffffff";
+        hoverBackgroundColor = isPlain_ ? "#ECF5FF" : "#f0f0f0";
+        textColor = "#606266";
+        hoverTextColor = "#606266";
         borderColor = "#dcdfe6";
-        hoverBorderColor = "#ECF5FF";
+        hoverBorderColor = "#dcdfe6";
+        disabledBackgroundColor = isPlain_ ? "#F5F7FA" : "#EBEEF5";
+        disabledTextColor = "#C0C4CC";
+        disabledBorderColor = "#E4E7ED";
         break;
-    }
-
-    if (isPlain_) {
-        textColor = backgroundColor;
-        hoverTextColor = hoverBackgroundColor;
-        backgroundColor = "transparent";
-        hoverBackgroundColor = "transparent";
     }
 
             // 设置按钮默认样式
@@ -252,10 +277,17 @@ void QelButton::updateButtonStyle() {
                  .arg(textColor)
                  .arg(borderColor);
 
+            // 设置 hover 样式
     QString hoverStyle = QString("QPushButton:hover { background-color: %1; color: %2; border: 1px solid %3; }")
                              .arg(hoverBackgroundColor)
                              .arg(hoverTextColor)
                              .arg(hoverBorderColor);
+
+            // 设置禁用样式
+    QString disabledStyle = QString("QPushButton:disabled { background-color: %1; color: %2; border: 1px solid %3; }")
+                                .arg(disabledBackgroundColor)
+                                .arg(disabledTextColor)
+                                .arg(disabledBorderColor);
 
             // 设置尺寸
     switch (size_) {
@@ -282,7 +314,8 @@ void QelButton::updateButtonStyle() {
 
     style += roundQSS + " }"; // 闭合 QPushButton 样式
 
-    style += hoverStyle; // 添加 hover 样式
+    style += hoverStyle;  // 添加 hover 样式
+    style += disabledStyle;  // 添加禁用状态样式
 
             // 设置样式表
     this->setStyleSheet(style);
