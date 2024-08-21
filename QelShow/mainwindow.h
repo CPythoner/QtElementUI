@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QStackedWidget>
+#include <QTreeWidget>
 
 #include "../QelIcon/QelIconTester.h"
+#include "../QelButton/QelButtonTester.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,9 +21,15 @@ public:
     ~MainWindow();
 
 private:
+    void addTreeItem(QTreeWidget *treeWidget, const QString &name);
+
+private:
     Ui::MainWindow *ui;
-    QStackedWidget *p_stacked_widget_;
-    QelIconTester  *p_qelicon_tester_ = nullptr;
+    QMap<QString, QWidget*> pageMap;
+    QStackedWidget *pStackedWidget;
+    QelIconTester  *pQelIconTester = nullptr;
+    QelButtonTester *pQelButtonTester = nullptr;
 };
 
 #endif // MAINWINDOW_H
+
