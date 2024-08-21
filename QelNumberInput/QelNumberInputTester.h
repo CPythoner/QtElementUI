@@ -9,8 +9,6 @@
 using qel::QelNumberInput;
 
 class QelNumberInputTester : public QWidget {
-    Q_OBJECT
-
 public:
     explicit QelNumberInputTester(QWidget *parent = nullptr) : QWidget(parent) {
         QVBoxLayout *mainLayout = new QVBoxLayout(this);

@@ -12,17 +12,20 @@ MainWindow::MainWindow(QWidget *parent) :
     QTreeWidget *treeWidget = new QTreeWidget(this);
     treeWidget->setHeaderLabel("QtElementUI Show");
 
-    // 创建 QelIconTester 和 QelButtonTester 页面
+    // 创建组件测试页面
     pQelIconTester = new QelIconTester(this);
     pQelButtonTester = new QelButtonTester(this);
+    pQelNumberInputTester = new QelNumberInputTester(this);
 
     // 创建页面与树项映射关系
     pageMap["QelIcon"] = pQelIconTester;
     pageMap["QelButton"] = pQelButtonTester;
+    pageMap["QelNumberInput"] = pQelNumberInputTester;
 
     // 添加树状列表的项目
     addTreeItem(treeWidget, "QelIcon");
     addTreeItem(treeWidget, "QelButton");
+    addTreeItem(treeWidget, "QelNumberInput");
 
     // 将所有页面添加到 QStackedWidget
     for (QWidget *page : pageMap.values()) {
