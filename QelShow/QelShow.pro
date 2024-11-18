@@ -42,3 +42,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 include($$PWD/../QelButton/QelButton.pri))
 include($$PWD/../QelIcon/QelIcon.pri))
 include($$PWD/../QelNumberInput/QelNumberInput.pri))
+include($$PWD/../QelSelect/QelSelect.pri))

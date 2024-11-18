@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/arrow-down.svg</file>
+        <file>icons/arrow-down-disabled.svg</file>
+    </qresource>
+</RCC>
