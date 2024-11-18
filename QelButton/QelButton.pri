@@ -1,5 +1,8 @@
 SOURCES += \
-        $$PWD/QelButton.cpp
+        $$PWD/QelButton.cpp \
+        $$PWD/QelButtonGroup.cpp
 
 HEADERS += \
-        $$PWD/QelButton.h
+        $$PWD/QelButton.h \
+        $$PWD/QelButtonGroup.h \
+        $$PWD/QelButtonTester.h

@@ -4,35 +4,46 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets
 
 TARGET = QelButton
 TEMPLATE = app
 
-# The following define makes your compiler emit warnings if you use
-# any feature of Qt which has been marked as deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
+CONFIG += c++11
+CONFIG += debug_and_release
+
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if you use deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-
 SOURCES += \
-        main.cpp \
-        QelButton.cpp
+    main.cpp \
+    QelButton.cpp \
+    QelButtonGroup.cpp
 
 HEADERS += \
-        QelButton.h \
-        QelButtonTester.h
+    QelButton.h \
+    QelButtonGroup.h \
+    QelButtonTester.h
 
-DISTFILES += \
-    QelButton.pri
+# 包含 QelIcon
+include($$PWD/../QelIcon/QelIcon.pri)
 
+INCLUDEPATH += $$PWD/..
+DEPENDPATH += $$PWD/..
 
-include($$PWD/../QelIcon/QelIcon.pri))
+# 设置输出目录
+CONFIG(debug, debug|release) {
+    DESTDIR = $$OUT_PWD/../debug
+    OBJECTS_DIR = debug
+    MOC_DIR = debug
+    RCC_DIR = debug
+    UI_DIR = debug
+} else {
+    DESTDIR = $$OUT_PWD/../release
+    OBJECTS_DIR = release
+    MOC_DIR = release
+    RCC_DIR = release
+    UI_DIR = release
+}
+
+# 确保输出目录存在
+mkpath($$DESTDIR)
