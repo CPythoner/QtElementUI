@@ -37,3 +37,4 @@ DISTFILES += \
 
 include($$PWD/../QelIcon/QelIcon.pri)
 include($$PWD/../QelTheme/QelTheme.pri)
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)
