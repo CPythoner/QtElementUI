@@ -52,14 +52,9 @@ QelNumberInput::QelNumberInput(QWidget *parent,
     valueDisplay->setStyleSheet("QLineEdit { border-top: 1px solid #dcdfe6; border-bottom: 1px solid #dcdfe6; "
         "border-left: 0px; border-right: 0px; background-color: white; }");
 
-    // 设置布局
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-
-    setControlsPosition(controlsPosition);  // 根据传入参数设置布局
-
-    setLayout(layout);
+    // 根据传入参数设置布局
+    // 注意：setControlsPosition 会创建并设置布局，避免重复 setLayout 导致悬空指针。
+    setControlsPosition(controlsPosition);
 
             // 连接信号槽
     connect(decreaseButton, &QPushButton::clicked, this, &QelNumberInput::onDecrease);
