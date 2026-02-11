@@ -45,3 +45,7 @@ include($$PWD/../QelNumberInput/QelNumberInput.pri)
 
 include($$PWD/../QelInput/QelInput.pri)
 include($$PWD/../QelSelect/QelSelect.pri)
+
+include($$PWD/../QelCheckbox/QelCheckbox.pri)
+include($$PWD/../QelRadio/QelRadio.pri)
+include($$PWD/../QelSwitch/QelSwitch.pri)
