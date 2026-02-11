@@ -1,5 +1,6 @@
 #include "QelSelect.h"
 
+#include <QAbstractItemView>
 #include <QHBoxLayout>
 #include <QLineEdit>
 
@@ -90,23 +91,34 @@ void QelSelect::applyStyle()
     int height = 32;
     int fontSize = 14;
     int horizontalPadding = 12;
+    int dropDownWidth = 38;
 
     switch (size_) {
     case Size::Large:
         height = 40;
         fontSize = 14;
         horizontalPadding = 14;
+        dropDownWidth = 42;
         break;
     case Size::Default:
         height = 32;
         fontSize = 14;
         horizontalPadding = 12;
+        dropDownWidth = 38;
         break;
     case Size::Small:
         height = 24;
         fontSize = 12;
         horizontalPadding = 8;
+        dropDownWidth = 26;
         break;
+    }
+
+    QFont font = comboBox_->font();
+    font.setPointSize(fontSize);
+    comboBox_->setFont(font);
+    if (comboBox_->view()) {
+        comboBox_->view()->setFont(font);
     }
 
     comboBox_->setFixedHeight(height);
@@ -116,22 +128,44 @@ void QelSelect::applyStyle()
         " border-radius: 4px;"
         " color: #606266;"
         " padding-left: %1px;"
-        " padding-right: %1px;"
+        " padding-right: %3px;"
         " font-size: %2px;"
         "}"
         "QComboBox:focus {"
         " border: 1px solid #409EFF;"
+        "}"
+        "QComboBox::drop-down {"
+        " subcontrol-origin: padding;"
+        " subcontrol-position: top right;"
+        " width: %3px;"
+        " border-left: 1px solid #DCDFE6;"
+        " border-top-right-radius: 4px;"
+        " border-bottom-right-radius: 4px;"
+        " background-color: #F5F7FA;"
+        "}"
+        "QComboBox::drop-down:hover {"
+        " border-left: 1px solid #409EFF;"
+        " background-color: #ECF5FF;"
+        "}"
+        "QComboBox::down-arrow {"
+        " width: 10px;"
+        " height: 10px;"
         "}"
         "QComboBox:disabled {"
         " color: #C0C4CC;"
         " background: #F5F7FA;"
         " border: 1px solid #E4E7ED;"
         "}"
+        "QComboBox:disabled::drop-down {"
+        " border-left: 1px solid #E4E7ED;"
+        " background-color: #F5F7FA;"
+        "}"
         "QComboBox QAbstractItemView {"
         " border: 1px solid #E4E7ED;"
+        " color: #606266;"
         " selection-background-color: #ECF5FF;"
         "}"
-    ).arg(horizontalPadding).arg(fontSize));
+    ).arg(horizontalPadding).arg(fontSize).arg(dropDownWidth));
 }
 
 } // namespace qel
