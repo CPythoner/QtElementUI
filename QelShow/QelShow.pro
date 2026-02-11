@@ -44,3 +44,4 @@ include($$PWD/../QelIcon/QelIcon.pri)
 include($$PWD/../QelNumberInput/QelNumberInput.pri)
 
 include($$PWD/../QelInput/QelInput.pri)
+include($$PWD/../QelSelect/QelSelect.pri)

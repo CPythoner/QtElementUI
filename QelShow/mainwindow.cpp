@@ -17,12 +17,14 @@ MainWindow::MainWindow(QWidget *parent) :
     pQelButtonTester = new QelButtonTester(this);
     pQelNumberInputTester = new QelNumberInputTester(this);
     pQelInputTester = new QelInputTester(this);
+    pQelSelectTester = new QelSelectTester(this);
 
     // 创建页面与树项映射关系
     pageMap["QelIcon"] = pQelIconTester;
     pageMap["QelButton"] = pQelButtonTester;
     pageMap["QelNumberInput"] = pQelNumberInputTester;
     pageMap["QelInput"] = pQelInputTester;
+    pageMap["QelSelect"] = pQelSelectTester;
 
     // 添加树状列表分组与项目
     QTreeWidgetItem *basicGroup = addTreeItem(treeWidget, "基础组件");
@@ -32,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addTreeItem(basicGroup, "QelButton");
     addTreeItem(formGroup, "QelNumberInput");
     addTreeItem(formGroup, "QelInput");
+    addTreeItem(formGroup, "QelSelect");
 
     treeWidget->expandAll();
 
