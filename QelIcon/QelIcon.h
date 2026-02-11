@@ -772,19 +772,22 @@ public:
 
         if (!fontFamily.isEmpty()) {
             QFont font(fontFamily);
-            font.setPointSize(size);
+            // 使用像素尺寸并预留边距，避免某些图标在高 DPI 或不同字体度量下被裁切。
+            const int pixelSize = qMax(1, static_cast<int>(size * 0.82));
+            font.setPixelSize(pixelSize);
 
-                    // 创建一个 QPixmap，用于绘制图标
             QPixmap pixmap(size, size);
             pixmap.fill(Qt::transparent);
 
-                    // 使用 QPainter 绘制图标
             QPainter painter(&pixmap);
+            painter.setRenderHint(QPainter::Antialiasing, true);
+            painter.setRenderHint(QPainter::TextAntialiasing, true);
             painter.setFont(font);
             painter.setPen(color);
-            painter.drawText(pixmap.rect(), Qt::AlignCenter, QChar(static_cast<ushort>(icon)));
 
-                    // 将绘制的图标作为 QIcon 的实例
+            const QRect drawRect = pixmap.rect().adjusted(1, 1, -1, -1);
+            painter.drawText(drawRect, Qt::AlignCenter, QChar(static_cast<ushort>(icon)));
+
             this->addPixmap(pixmap);
         }
     }
