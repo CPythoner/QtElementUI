@@ -77,7 +77,7 @@ public:
         }
 
 
-        mainLayout->addWidget(createTitle("With borders（参考 Element Plus）"));
+        mainLayout->addWidget(createTitle("With borders"));
         {
             QFrame *panel = new QFrame(this);
             panel->setStyleSheet("QFrame { border: 1px solid #DCDFE6; border-radius: 4px; background: #FFFFFF; }");
@@ -118,7 +118,7 @@ public:
             mainLayout->addWidget(panel);
         }
 
-        mainLayout->addWidget(createTitle("Check all（参考 Element Plus）"));
+        mainLayout->addWidget(createTitle("Check all"));
         {
             QVBoxLayout *groupLayout = new QVBoxLayout();
             groupLayout->setSpacing(8);

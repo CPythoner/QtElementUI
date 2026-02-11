@@ -59,7 +59,7 @@ public:
             bgColor = borderColor;
         }
 
-        const QRectF rect = option->rect.adjusted(0.5, 0.5, -0.5, -0.5);
+        const QRectF rect = option->rect.adjusted(1.0, 0.5, -0.5, -0.5);
 
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing, true);
