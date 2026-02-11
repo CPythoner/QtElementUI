@@ -122,8 +122,15 @@ QelElementUI 组件可以通过修改提供的样式表或重写绘制事件进�
 ```cpp
 #include "QelCheckbox.h"
 
-qel::QelCheckbox *checkbox = new qel::QelCheckbox("接收通知", this);
-checkbox->setChecked(true);
+qel::QelCheckbox *checkbox = new qel::QelCheckbox(
+    "接收通知",      // text
+    true,            // checked
+    false,           // disabled
+    false,           // indeterminate
+    true,            // border
+    qel::QelCheckbox::Size::Default,
+    this
+);
 ```
 
 ### QelRadio 示例

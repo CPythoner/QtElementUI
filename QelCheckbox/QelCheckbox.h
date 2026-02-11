@@ -18,6 +18,14 @@ public:
 
     explicit QelCheckbox(const QString &text = QString(), QWidget *parent = nullptr);
 
+    explicit QelCheckbox(const QString &text,
+                         bool checked = false,
+                         bool disabled = false,
+                         bool indeterminate = false,
+                         bool border = false,
+                         Size size = Size::Default,
+                         QWidget *parent = nullptr);
+
     void setSize(Size size);
     void setBorder(bool border);
     void setIndeterminate(bool indeterminate);

@@ -93,16 +93,35 @@ private:
 } // namespace
 
 QelCheckbox::QelCheckbox(const QString &text, QWidget *parent)
-    : QCheckBox(text, parent)
+    : QelCheckbox(text, false, false, false, false, Size::Default, parent)
+{
+}
+
+QelCheckbox::QelCheckbox(const QString &text,
+                         bool checked,
+                         bool disabled,
+                         bool indeterminate,
+                         bool border,
+                         Size size,
+                         QWidget *parent)
+    : QCheckBox(text, parent),
+      size_(size),
+      border_(border)
 {
     setTristate(true);
-    setCheckState(Qt::Unchecked);
     setCursor(Qt::PointingHandCursor);
 
     connect(this, &QCheckBox::stateChanged, this, [this](int) {
         update();
     });
 
+    if (indeterminate) {
+        setCheckState(Qt::PartiallyChecked);
+    } else {
+        setChecked(checked);
+    }
+
+    setDisabled(disabled);
     applyStyle();
 }
 

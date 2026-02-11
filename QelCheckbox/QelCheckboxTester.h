@@ -86,11 +86,8 @@ public:
             grid->setHorizontalSpacing(18);
             grid->setVerticalSpacing(12);
 
-            QelCheckbox *default1 = new QelCheckbox("Option1", panel);
-            QelCheckbox *default2 = new QelCheckbox("Option2", panel);
-            default1->setBorder(true);
-            default2->setBorder(true);
-            default1->setChecked(true);
+            QelCheckbox *default1 = new QelCheckbox("Option1", true, false, false, true, QelCheckbox::Size::Default, panel);
+            QelCheckbox *default2 = new QelCheckbox("Option2", false, false, false, true, QelCheckbox::Size::Default, panel);
 
             QelCheckbox *default3 = new QelCheckbox("Option1", panel);
             QelCheckbox *default4 = new QelCheckbox("Option2", panel);
@@ -106,13 +103,8 @@ public:
             small2->setSize(QelCheckbox::Size::Small);
             small1->setChecked(true);
 
-            QelCheckbox *disabled1 = new QelCheckbox("Option1", panel);
-            QelCheckbox *disabled2 = new QelCheckbox("Option2", panel);
-            disabled1->setBorder(true);
-            disabled2->setBorder(true);
-            disabled1->setChecked(true);
-            disabled1->setDisabled(true);
-            disabled2->setDisabled(true);
+            QelCheckbox *disabled1 = new QelCheckbox("Option1", true, true, false, true, QelCheckbox::Size::Small, panel);
+            QelCheckbox *disabled2 = new QelCheckbox("Option2", false, true, false, true, QelCheckbox::Size::Small, panel);
 
             grid->addWidget(default1, 0, 0);
             grid->addWidget(default2, 0, 1);
