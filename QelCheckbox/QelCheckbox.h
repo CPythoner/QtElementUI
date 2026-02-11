@@ -19,13 +19,18 @@ public:
     explicit QelCheckbox(const QString &text = QString(), QWidget *parent = nullptr);
 
     void setSize(Size size);
+    void setBorder(bool border);
     void setIndeterminate(bool indeterminate);
+
+    Size size() const { return size_; }
+    bool border() const { return border_; }
 
 private:
     void applyStyle();
 
 private:
     Size size_ = Size::Default;
+    bool border_ = false;
 };
 
 } // namespace qel

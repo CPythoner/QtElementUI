@@ -116,6 +116,16 @@ void QelCheckbox::setSize(Size size)
     applyStyle();
 }
 
+void QelCheckbox::setBorder(bool border)
+{
+    if (border_ == border) {
+        return;
+    }
+
+    border_ = border;
+    applyStyle();
+}
+
 void QelCheckbox::setIndeterminate(bool indeterminate)
 {
     if (indeterminate) {
@@ -131,44 +141,80 @@ void QelCheckbox::applyStyle()
     int indicatorSize = 14;
     int fontSize = 14;
     int spacing = 8;
+    int minHeight = 32;
+    int horizontalPadding = 14;
 
     switch (size_) {
     case Size::Large:
         indicatorSize = 16;
-        fontSize = 16;
+        fontSize = 14;
         spacing = 10;
+        minHeight = 40;
+        horizontalPadding = 18;
         break;
     case Size::Default:
         indicatorSize = 14;
         fontSize = 14;
         spacing = 8;
+        minHeight = 32;
+        horizontalPadding = 14;
         break;
     case Size::Small:
         indicatorSize = 12;
         fontSize = 12;
         spacing = 6;
+        minHeight = 24;
+        horizontalPadding = 10;
         break;
     }
 
     QelCheckboxStyle *style = new QelCheckboxStyle(indicatorSize);
     style->setParent(this);
     setStyle(style);
-    setStyleSheet(QString(
+
+    QString controlStyle;
+    if (border_) {
+        controlStyle = QString(
+            " border: 1px solid #DCDFE6;"
+            " border-radius: 4px;"
+            " background: #FFFFFF;"
+            " min-height: %1px;"
+            " padding-left: %2px;"
+            " padding-right: %2px;"
+        ).arg(minHeight).arg(horizontalPadding);
+    }
+
+    QString styleSheet = QString(
         "QCheckBox {"
         " color: #606266;"
         " spacing: %1px;"
         " font-size: %2px;"
+        "%3"
         "}"
         "QCheckBox:hover {"
         " color: #409EFF;"
+        "%4"
+        "}"
+        "QCheckBox:checked {"
+        " color: #409EFF;"
+        "%5"
         "}"
         "QCheckBox:disabled {"
         " color: #C0C4CC;"
+        "%6"
         "}"
         "QCheckBox:focus {"
         " outline: none;"
         "}"
-    ).arg(spacing).arg(fontSize));
+    )
+        .arg(spacing)
+        .arg(fontSize)
+        .arg(controlStyle)
+        .arg(border_ ? " border-color: #409EFF;" : "")
+        .arg(border_ ? " border-color: #409EFF;" : "")
+        .arg(border_ ? " border-color: #EBEEF5; background: #F5F7FA;" : "");
+
+    setStyleSheet(styleSheet);
 }
 
 } // namespace qel

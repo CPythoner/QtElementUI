@@ -3,6 +3,8 @@
 
 #include "QelCheckbox.h"
 
+#include <QFrame>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -72,6 +74,56 @@ public:
             row->addWidget(large);
             row->addStretch();
             mainLayout->addLayout(row);
+        }
+
+
+        mainLayout->addWidget(createTitle("With borders（参考 Element Plus）"));
+        {
+            QFrame *panel = new QFrame(this);
+            panel->setStyleSheet("QFrame { border: 1px solid #DCDFE6; border-radius: 4px; background: #FFFFFF; }");
+            QGridLayout *grid = new QGridLayout(panel);
+            grid->setContentsMargins(18, 14, 18, 14);
+            grid->setHorizontalSpacing(18);
+            grid->setVerticalSpacing(12);
+
+            QelCheckbox *default1 = new QelCheckbox("Option1", panel);
+            QelCheckbox *default2 = new QelCheckbox("Option2", panel);
+            default1->setBorder(true);
+            default2->setBorder(true);
+            default1->setChecked(true);
+
+            QelCheckbox *default3 = new QelCheckbox("Option1", panel);
+            QelCheckbox *default4 = new QelCheckbox("Option2", panel);
+            default3->setBorder(true);
+            default4->setBorder(true);
+            default4->setChecked(true);
+
+            QelCheckbox *small1 = new QelCheckbox("Option1", panel);
+            QelCheckbox *small2 = new QelCheckbox("Option2", panel);
+            small1->setBorder(true);
+            small2->setBorder(true);
+            small1->setSize(QelCheckbox::Size::Small);
+            small2->setSize(QelCheckbox::Size::Small);
+            small1->setChecked(true);
+
+            QelCheckbox *disabled1 = new QelCheckbox("Option1", panel);
+            QelCheckbox *disabled2 = new QelCheckbox("Option2", panel);
+            disabled1->setBorder(true);
+            disabled2->setBorder(true);
+            disabled1->setChecked(true);
+            disabled1->setDisabled(true);
+            disabled2->setDisabled(true);
+
+            grid->addWidget(default1, 0, 0);
+            grid->addWidget(default2, 0, 1);
+            grid->addWidget(default3, 1, 0);
+            grid->addWidget(default4, 1, 1);
+            grid->addWidget(small1, 2, 0);
+            grid->addWidget(small2, 2, 1);
+            grid->addWidget(disabled1, 3, 0);
+            grid->addWidget(disabled2, 3, 1);
+
+            mainLayout->addWidget(panel);
         }
 
         mainLayout->addWidget(createTitle("Check all（参考 Element Plus）"));
