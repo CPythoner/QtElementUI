@@ -16,16 +16,19 @@ MainWindow::MainWindow(QWidget *parent) :
     pQelIconTester = new QelIconTester(this);
     pQelButtonTester = new QelButtonTester(this);
     pQelNumberInputTester = new QelNumberInputTester(this);
+    pQelInputTester = new QelInputTester(this);
 
     // 创建页面与树项映射关系
     pageMap["QelIcon"] = pQelIconTester;
     pageMap["QelButton"] = pQelButtonTester;
     pageMap["QelNumberInput"] = pQelNumberInputTester;
+    pageMap["QelInput"] = pQelInputTester;
 
     // 添加树状列表的项目
     addTreeItem(treeWidget, "QelIcon");
     addTreeItem(treeWidget, "QelButton");
     addTreeItem(treeWidget, "QelNumberInput");
+    addTreeItem(treeWidget, "QelInput");
 
     // 将所有页面添加到 QStackedWidget
     for (QWidget *page : pageMap.values()) {

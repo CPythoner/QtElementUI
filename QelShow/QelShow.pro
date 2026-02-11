@@ -39,6 +39,8 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-include($$PWD/../QelButton/QelButton.pri))
-include($$PWD/../QelIcon/QelIcon.pri))
-include($$PWD/../QelNumberInput/QelNumberInput.pri))
+include($$PWD/../QelButton/QelButton.pri)
+include($$PWD/../QelIcon/QelIcon.pri)
+include($$PWD/../QelNumberInput/QelNumberInput.pri)
+
+include($$PWD/../QelInput/QelInput.pri)

@@ -4,5 +4,6 @@ SUBDIRS += \
     QelIcon \
     QelButton   \
     QelNumberInput \
+    QelInput \
     QelShow
 
