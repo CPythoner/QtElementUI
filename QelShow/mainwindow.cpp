@@ -16,17 +16,27 @@ MainWindow::MainWindow(QWidget *parent) :
     pQelIconTester = new QelIconTester(this);
     pQelButtonTester = new QelButtonTester(this);
     pQelNumberInputTester = new QelNumberInputTester(this);
+    pQelInputTester = new QelInputTester(this);
+    pQelSelectTester = new QelSelectTester(this);
 
     // 创建页面与树项映射关系
     pageMap["QelIcon"] = pQelIconTester;
     pageMap["QelButton"] = pQelButtonTester;
     pageMap["QelNumberInput"] = pQelNumberInputTester;
+    pageMap["QelInput"] = pQelInputTester;
+    pageMap["QelSelect"] = pQelSelectTester;
 
+    // 添加树状列表分组与项目
+    QTreeWidgetItem *basicGroup = addTreeItem(treeWidget, "基础组件");
+    QTreeWidgetItem *formGroup = addTreeItem(treeWidget, "表单组件");
 
-    // 添加树状列表的项目
-    addTreeItem(treeWidget, "QelIcon");
-    addTreeItem(treeWidget, "QelButton");
-    addTreeItem(treeWidget, "QelNumberInput");
+    addTreeItem(basicGroup, "QelIcon");
+    addTreeItem(basicGroup, "QelButton");
+    addTreeItem(formGroup, "QelNumberInput");
+    addTreeItem(formGroup, "QelInput");
+    addTreeItem(formGroup, "QelSelect");
+
+    treeWidget->expandAll();
 
     // 将所有页面添加到 QStackedWidget
     for (QWidget *page : pageMap.values()) {
@@ -44,13 +54,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 连接树状列表的点击信号和页面切换槽函数
     connect(treeWidget, &QTreeWidget::itemClicked, [=](QTreeWidgetItem *item, int) {
-        if (pageMap.contains(item->text(0))) {
-            pStackedWidget->setCurrentWidget(pageMap[item->text(0)]);
-        } else {
-            // 当选择了不存在的树项时显示默认页面
-            pStackedWidget->setCurrentWidget(new QLabel("No Page Found", this));
+        const QString pageKey = item->data(0, Qt::UserRole).toString();
+        if (pageMap.contains(pageKey)) {
+            pStackedWidget->setCurrentWidget(pageMap[pageKey]);
         }
     });
+
+    if (pageMap.contains("QelIcon")) {
+        pStackedWidget->setCurrentWidget(pageMap["QelIcon"]);
+    }
 
             // 设置主窗口的尺寸策略
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -61,8 +73,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::addTreeItem(QTreeWidget *treeWidget, const QString &name)
+QTreeWidgetItem *MainWindow::addTreeItem(QTreeWidget *treeWidget, const QString &name)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(treeWidget);
     item->setText(0, name);
+    item->setData(0, Qt::UserRole, name);
+    return item;
+}
+
+QTreeWidgetItem *MainWindow::addTreeItem(QTreeWidgetItem *parent, const QString &name)
+{
+    QTreeWidgetItem *item = new QTreeWidgetItem(parent);
+    item->setText(0, name);
+    item->setData(0, Qt::UserRole, name);
+    return item;
 }

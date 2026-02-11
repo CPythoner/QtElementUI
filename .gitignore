@@ -1,0 +1,52 @@
+# Qt Creator user-specific files
+*.pro.user
+*.pro.user.*
+*.creator
+*.creator.user
+*.creator.user.*
+*.files
+*.includes
+
+# Build directories
+build/
+Build/
+cmake-build-*/
+
+# Qt/C++ build artifacts
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Qt generated files
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+
+# Debug symbols / profiling
+*.dSYM/
+*.pdb
+*.gcno
+*.gcda
+*.gcov
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+*~
+.DS_Store
+
+# Python cache (repo has python-generated resources)
+__pycache__/
+*.pyc

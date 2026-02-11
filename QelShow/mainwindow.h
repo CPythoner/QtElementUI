@@ -8,6 +8,8 @@
 #include "../QelIcon/QelIconTester.h"
 #include "../QelButton/QelButtonTester.h"
 #include "../QelNumberInput/QelNumberInputTester.h"
+#include "../QelInput/QelInputTester.h"
+#include "../QelSelect/QelSelectTester.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +24,8 @@ public:
     ~MainWindow();
 
 private:
-    void addTreeItem(QTreeWidget *treeWidget, const QString &name);
+    QTreeWidgetItem *addTreeItem(QTreeWidget *treeWidget, const QString &name);
+    QTreeWidgetItem *addTreeItem(QTreeWidgetItem *parent, const QString &name);
 
 private:
     Ui::MainWindow *ui;
@@ -31,6 +34,8 @@ private:
     QelIconTester  *pQelIconTester = nullptr;
     QelButtonTester *pQelButtonTester = nullptr;
     QelNumberInputTester *pQelNumberInputTester = nullptr;
+    QelInputTester *pQelInputTester = nullptr;
+    QelSelectTester *pQelSelectTester = nullptr;
 };
 
 #endif // MAINWINDOW_H

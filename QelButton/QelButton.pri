@@ -3,3 +3,5 @@ SOURCES += \
 
 HEADERS += \
         $$PWD/QelButton.h
+
+include($$PWD/../QelTheme/QelTheme.pri)

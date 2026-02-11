@@ -10,6 +10,8 @@
     - [QelIcon 示例](#qelicon-示例)
     - [QelButton 示例](#qelbutton-示例)
     - [QelNumberInput 示例](#qelnumberinput-示例)
+    - [QelInput 示例](#qelinput-示例)
+    - [QelSelect 示例](#qelselect-示例)
   - [自定义](#自定义)
 
 # QelElementUI 项目
@@ -35,7 +37,7 @@ git clone git@github.com:CPythoner/QtElementUI.git
 ```bash
 # 在你的 .pro 文件中
 
-include($$PWD/../QelButton/QelButton.pri))
+include($$PWD/../QelButton/QelButton.pri)
 ```
 
 ## QelShow 项目
@@ -44,9 +46,9 @@ include($$PWD/../QelButton/QelButton.pri))
 
 ### QelShow 功能
 
-- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput` 等。
+- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect` 等。
 
-- 通过左侧的树状列表选择不同的组件，右侧展示对应的测试界面。
+- 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
 ### 运行 QelShow
 
@@ -86,6 +88,25 @@ numberInput->setMinValue(0);
 numberInput->setMaxValue(100);
 numberInput->setStep(1.0);
 numberInput->setSize(QelNumberInput::Default);
+```
+
+### QelInput 示例
+
+```cpp
+#include "QelInput.h"
+
+QelInput *input = new QelInput(this, QelInput::Type::Text, "请输入内容");
+input->setClearable(true);
+```
+
+### QelSelect 示例
+
+```cpp
+#include "QelSelect.h"
+
+QelSelect *select = new QelSelect(this);
+select->addOption("北京", "beijing");
+select->addOption("上海", "shanghai");
 ```
 
 ## 自定义
