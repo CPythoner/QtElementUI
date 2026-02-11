@@ -782,7 +782,7 @@ public:
             QPainter painter(&pixmap);
             painter.setFont(font);
             painter.setPen(color);
-            painter.drawText(pixmap.rect(), Qt::AlignCenter, QChar(icon));
+            painter.drawText(pixmap.rect(), Qt::AlignCenter, QChar(static_cast<ushort>(icon)));
 
                     // 将绘制的图标作为 QIcon 的实例
             this->addPixmap(pixmap);
