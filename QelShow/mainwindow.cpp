@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pageMap["QelButton"] = pQelButtonTester;
     pageMap["QelNumberInput"] = pQelNumberInputTester;
 
+
     // 添加树状列表的项目
     addTreeItem(treeWidget, "QelIcon");
     addTreeItem(treeWidget, "QelButton");
