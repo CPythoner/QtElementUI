@@ -23,7 +23,8 @@ public:
     ~MainWindow();
 
 private:
-    void addTreeItem(QTreeWidget *treeWidget, const QString &name);
+    QTreeWidgetItem *addTreeItem(QTreeWidget *treeWidget, const QString &name);
+    QTreeWidgetItem *addTreeItem(QTreeWidgetItem *parent, const QString &name);
 
 private:
     Ui::MainWindow *ui;

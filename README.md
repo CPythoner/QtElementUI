@@ -47,7 +47,7 @@ include($$PWD/../QelButton/QelButton.pri)
 
 - 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput` 等。
 
-- 通过左侧的树状列表选择不同的组件，右侧展示对应的测试界面。
+- 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
 ### 运行 QelShow
 
