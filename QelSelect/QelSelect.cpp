@@ -124,10 +124,15 @@ void QelSelect::applyStyle()
     }
 
     QFont font = comboBox_->font();
-    font.setPixelSize(fontSize);
+    font.setPointSize(fontSize);
     comboBox_->setFont(font);
     if (comboBox_->view()) {
         comboBox_->view()->setFont(font);
+        comboBox_->view()->setWindowFlag(Qt::NoDropShadowWindowHint, true);
+        if (comboBox_->view()->window()) {
+            comboBox_->view()->window()->setAttribute(Qt::WA_TranslucentBackground, false);
+            comboBox_->view()->window()->setWindowOpacity(1.0);
+        }
     }
 
     comboBox_->setFixedHeight(height);
@@ -156,8 +161,11 @@ void QelSelect::applyStyle()
         "}"
         "QComboBox QAbstractItemView {"
         " border: 1px solid #E4E7ED;"
+        " background-color: #FFFFFF;"
         " color: #606266;"
         " selection-background-color: #ECF5FF;"
+        " selection-color: #409EFF;"
+        " outline: 0;"
         "}"
     ).arg(horizontalPadding).arg(dropDownWidth));
 
