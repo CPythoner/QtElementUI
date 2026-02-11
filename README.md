@@ -138,8 +138,15 @@ qel::QelCheckbox *checkbox = new qel::QelCheckbox(
 ```cpp
 #include "QelRadio.h"
 
-qel::QelRadio *radio = new qel::QelRadio("选项 A", this);
-radio->setChecked(true);
+qel::QelRadio *radio = new qel::QelRadio(
+    "选项 A",      // text
+    true,          // checked
+    false,         // disabled
+    true,          // border
+    qel::QelRadio::Size::Default,
+    qel::QelRadio::StyleType::Default,
+    this
+);
 ```
 
 ### QelSwitch 示例
