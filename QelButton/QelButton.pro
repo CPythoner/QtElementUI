@@ -35,4 +35,5 @@ DISTFILES += \
     QelButton.pri
 
 
-include($$PWD/../QelIcon/QelIcon.pri))
+include($$PWD/../QelIcon/QelIcon.pri)
+include($$PWD/../QelTheme/QelTheme.pri)
