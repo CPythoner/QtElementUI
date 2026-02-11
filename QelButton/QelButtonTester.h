@@ -6,7 +6,6 @@
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -110,9 +109,9 @@ private:
         layout->addWidget(title);
 
         QHBoxLayout *demoRow = new QHBoxLayout();
-        QPushButton *showPopupButton = new QPushButton("Show Popup", this);
-        QPushButton *fadeButton = new QPushButton("Fade In/Out", this);
-        QPushButton *pressEffectButton = new QPushButton("Press Feedback", this);
+        QelButton *showPopupButton = new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Show Popup", this);
+        QelButton *fadeButton = new QelButton(QelButton::Success, QelButton::Medium, true, false, false, false, QelButton::Button, QIcon(), "Fade In/Out", this);
+        QelButton *pressEffectButton = new QelButton(QelButton::Warning, QelButton::Medium, false, true, false, false, QelButton::Button, QIcon(), "Press Feedback", this);
 
         animationTarget_ = new QLabel("Animation Target", this);
         animationTarget_->setMinimumWidth(140);
@@ -125,7 +124,7 @@ private:
         demoRow->addStretch();
         layout->addLayout(demoRow);
 
-        connect(showPopupButton, &QPushButton::clicked, this, [this, showPopupButton]() {
+        connect(showPopupButton, &QelButton::clicked, this, [this, showPopupButton]() {
             QFrame *popup = new QFrame(nullptr, Qt::ToolTip);
             popup->setAttribute(Qt::WA_DeleteOnClose, true);
             popup->setStyleSheet("QFrame{background:#ffffff;border:1px solid #dcdfe6;border-radius:4px;} QLabel{padding:6px;color:#606266;}");
@@ -152,7 +151,7 @@ private:
             });
         });
 
-        connect(fadeButton, &QPushButton::clicked, this, [this]() {
+        connect(fadeButton, &QelButton::clicked, this, [this]() {
             if (animationTarget_ == nullptr) {
                 return;
             }
@@ -164,7 +163,7 @@ private:
             }
         });
 
-        connect(pressEffectButton, &QPushButton::clicked, this, [pressEffectButton]() {
+        connect(pressEffectButton, &QelButton::clicked, this, [pressEffectButton]() {
             QelAnimationHelper::pressFeedback(pressEffectButton, 110);
         });
     }
