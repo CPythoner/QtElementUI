@@ -45,6 +45,127 @@
 2. **基础工具层**
    - 增加工具类：`QelStyleHelper`、`QelAnimationHelper`、`QelPopupManager`。
    - 定义组件状态模型（normal/hover/active/focus/disabled/loading）。
+
+#### 基础工具层设计与落地说明
+
+为避免后续组件重复实现样式逻辑、动画逻辑与弹层管理，Phase 0 先补齐 3 个通用 Helper，并统一状态模型。
+
+##### 1) `QelStyleHelper`（样式辅助）
+
+**职责定位**
+- 负责把 Design Tokens（颜色、字号、圆角、边框、阴影、间距）映射为组件可直接使用的样式结果。
+- 负责根据组件状态生成最终样式（如按钮 normal/hover/active 的背景、边框、文字色）。
+- 提供统一状态优先级解析，避免每个组件自己写 if/else。
+
+**建议接口（示例）**
+- `QelVisualState resolveState(const QelStateContext &ctx)`：根据当前交互上下文解析视觉状态。
+- `QColor textColor(ComponentType type, QelVisualState state, QelTheme theme)`：返回文本色。
+- `QColor backgroundColor(ComponentType type, QelVisualState state, QelTheme theme)`：返回背景色。
+- `QColor borderColor(ComponentType type, QelVisualState state, QelTheme theme)`：返回边框色。
+- `int radius(ComponentType type, Size size)`：返回圆角。
+
+**落地要求**
+- 所有组件禁止直接硬编码状态色，必须通过 `QelStyleHelper` + token 获取。
+- `QelButton`、`QelNumberInput` 在 Phase 0 作为首批改造对象。
+
+##### 2) `QelAnimationHelper`（动画辅助）
+
+**职责定位**
+- 统一封装常见动画：淡入淡出、缩放、位移、状态切换过渡（hover/active/focus）。
+- 统一动画时长与缓动曲线，确保跨组件交互一致。
+- 提供低性能环境下的降级开关（关闭或缩短动画）。
+
+**建议接口（示例）**
+- `void fadeIn(QWidget *target, int duration = 160)`
+- `void fadeOut(QWidget *target, int duration = 120)`
+- `void pressFeedback(QWidget *target)`（点击按压反馈）
+- `void focusRingPulse(QWidget *target)`（焦点高亮过渡）
+- `void setAnimationEnabled(bool enabled)`（全局开关）
+
+**默认规范（建议）**
+- hover 过渡：`120ms ~ 160ms`
+- active 按压反馈：`80ms ~ 120ms`
+- 弹层出现：`160ms ~ 220ms`
+- 默认缓动：`OutCubic` / `OutQuad`（依据 Qt 动画曲线映射）
+
+##### 3) `QelPopupManager`（弹层管理）
+
+**职责定位**
+- 统一管理所有弹层组件（Tooltip、Popover、Dropdown、Select 面板、Dialog、Message 等）的定位、层级与显示策略。
+- 负责窗口边界检测与自动翻转（如下方空间不足则改为上方弹出）。
+- 提供全局 z-index 分配与焦点/关闭行为（点击外部关闭、Esc 关闭、互斥显示）。
+
+**建议接口（示例）**
+- `QPoint computePopupPosition(QWidget *anchor, QSize popupSize, PopupPlacement placement)`
+- `int acquireZIndex(PopupType type)`
+- `void registerPopup(QWidget *popup, PopupPolicy policy)`
+- `void closeAll(PopupType type)`
+- `void handleScreenBoundary(QWidget *popup)`
+
+**行为约束（建议）**
+- 同类轻量提示（Tooltip/Popover）可并存；同一触发源重复触发只保留一个实例。
+- 强交互弹层（Dialog/Drawer/MessageBox）应具备焦点陷阱与 Esc 关闭。
+- 弹层默认遵循“就近显示 + 不遮挡关键触发控件”的原则。
+
+##### 4) 组件状态模型（`normal/hover/active/focus/disabled/loading`）
+
+**统一状态定义**
+- `normal`：默认可交互状态。
+- `hover`：鼠标悬停在可交互区域。
+- `active`：鼠标按下或键盘触发按压中的瞬时状态。
+- `focus`：通过键盘 Tab 或鼠标聚焦后的可访问性状态（应有可见焦点样式）。
+- `disabled`：禁用态，不可触发交互。
+- `loading`：处理中状态，通常表现为不可重复提交 + 加载指示器。
+
+**状态优先级（高 -> 低）**
+- `disabled` > `loading` > `active` > `hover` > `focus` > `normal`
+
+> 说明：
+> - `disabled` 为绝对最高优先级，命中后忽略其他状态。
+> - `loading` 期间建议屏蔽重复点击，视觉上可保留 focus ring 但交互逻辑按不可重复触发处理。
+> - `focus` 主要服务键盘可访问性，不应被 hover 样式完全覆盖（可采用叠加边框/外发光）。
+
+**推荐状态上下文结构（示意）**
+
+```cpp
+struct QelStateContext {
+    bool enabled = true;
+    bool loading = false;
+    bool hovered = false;
+    bool pressed = false;
+    bool focused = false;
+};
+
+enum class QelVisualState {
+    Normal,
+    Hover,
+    Active,
+    Focus,
+    Disabled,
+    Loading
+};
+```
+
+**解析规则（伪代码）**
+
+```cpp
+QelVisualState QelStyleHelper::resolveState(const QelStateContext &ctx) {
+    if (!ctx.enabled) return QelVisualState::Disabled;
+    if (ctx.loading) return QelVisualState::Loading;
+    if (ctx.pressed) return QelVisualState::Active;
+    if (ctx.hovered) return QelVisualState::Hover;
+    if (ctx.focused) return QelVisualState::Focus;
+    return QelVisualState::Normal;
+}
+```
+
+##### 5) 阶段验收清单（基础工具层）
+- 三个 Helper 具备独立头源文件与最小示例调用。
+- `QelButton`/`QelNumberInput` 已改为使用 `resolveState + token` 渲染样式。
+- 至少覆盖以下测试：
+  - 状态优先级测试（disabled/loading/active 冲突场景）。
+  - 弹层边界翻转测试（底部空间不足、右侧越界）。
+  - 动画开关测试（启用/禁用动画行为一致）。
 3. **工程规范与质量门禁**
    - 增加基础单元测试工程（建议 `Qt Test`）。
    - 增加静态检查与格式化规则（如 clang-format）。
