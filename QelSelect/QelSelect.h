@@ -3,6 +3,8 @@
 
 #include <QComboBox>
 #include <QStringList>
+#include <QResizeEvent>
+#include <QToolButton>
 #include <QVariant>
 #include <QWidget>
 
@@ -37,11 +39,16 @@ signals:
     void currentIndexChanged(int index);
     void currentTextChanged(const QString &text);
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     void applyStyle();
+    void updateDropDownButtonIcon(int buttonHeight);
 
 private:
     QComboBox *comboBox_ = nullptr;
+    QToolButton *dropDownButton_ = nullptr;
     Size size_ = Size::Default;
 };
 

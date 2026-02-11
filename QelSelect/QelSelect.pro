@@ -19,3 +19,5 @@ HEADERS += \
 
 DISTFILES += \
     QelSelect.pri
+
+include($$PWD/../QelIcon/QelIcon.pri)
