@@ -46,7 +46,8 @@ public:
                        NativeButtonType nativeType = NativeButtonType::Button,
                        const QIcon &icon = QIcon(),
                        const QString &text = QString(),
-                       QWidget *parent = nullptr);
+                       QWidget *parent = nullptr,
+                       bool hasBackground = false);
 
     void setType(ButtonType type);
     void setSize(ButtonSize size);

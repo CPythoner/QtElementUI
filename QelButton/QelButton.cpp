@@ -132,7 +132,8 @@ QelButton::QelButton(ButtonType type,
                      NativeButtonType nativeType,
                      const QIcon &icon,
                      const QString &text,
-                     QWidget *parent)
+                     QWidget *parent,
+                     bool hasBackground)
     : QPushButton(text, parent)
     , type_(type)
     , size_(size)
@@ -141,6 +142,7 @@ QelButton::QelButton(ButtonType type,
     , isCircle_(isCircle)
     , isLoading_(isLoading)
     , nativeType_(nativeType)
+    , hasBackground_(hasBackground)
 {
     setIcon(icon);
     setProperty("qel-loading", isLoading_);
