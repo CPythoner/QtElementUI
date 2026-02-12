@@ -12,6 +12,9 @@
     - [QelNumberInput 示例](#qelnumberinput-示例)
     - [QelInput 示例](#qelinput-示例)
     - [QelSelect 示例](#qelselect-示例)
+    - [QelCheckbox 示例](#qelcheckbox-示例)
+    - [QelRadio 示例](#qelradio-示例)
+    - [QelSwitch 示例](#qelswitch-示例)
   - [自定义](#自定义)
 
 # QelElementUI 项目
@@ -46,7 +49,7 @@ include($$PWD/../QelButton/QelButton.pri)
 
 ### QelShow 功能
 
-- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect` 等。
+- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch` 等。
 
 - 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
@@ -112,3 +115,45 @@ select->addOption("上海", "shanghai");
 ## 自定义
 
 QelElementUI 组件可以通过修改提供的样式表或重写绘制事件进行定制，以满足特定的设计需求。
+
+
+### QelCheckbox 示例
+
+```cpp
+#include "QelCheckbox.h"
+
+qel::QelCheckbox *checkbox = new qel::QelCheckbox(
+    "接收通知",      // text
+    true,            // checked
+    false,           // disabled
+    false,           // indeterminate
+    true,            // border
+    qel::QelCheckbox::Size::Default,
+    this
+);
+```
+
+### QelRadio 示例
+
+```cpp
+#include "QelRadio.h"
+
+qel::QelRadio *radio = new qel::QelRadio(
+    "选项 A",      // text
+    true,          // checked
+    false,         // disabled
+    true,          // border
+    qel::QelRadio::Size::Default,
+    qel::QelRadio::StyleType::Default,
+    this
+);
+```
+
+### QelSwitch 示例
+
+```cpp
+#include "QelSwitch.h"
+
+qel::QelSwitch *sw = new qel::QelSwitch(this);
+sw->setChecked(true);
+```

@@ -10,6 +10,9 @@
 #include "../QelNumberInput/QelNumberInputTester.h"
 #include "../QelInput/QelInputTester.h"
 #include "../QelSelect/QelSelectTester.h"
+#include "../QelCheckbox/QelCheckboxTester.h"
+#include "../QelRadio/QelRadioTester.h"
+#include "../QelSwitch/QelSwitchTester.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,6 +39,9 @@ private:
     QelNumberInputTester *pQelNumberInputTester = nullptr;
     QelInputTester *pQelInputTester = nullptr;
     QelSelectTester *pQelSelectTester = nullptr;
+    QelCheckboxTester *pQelCheckboxTester = nullptr;
+    QelRadioTester *pQelRadioTester = nullptr;
+    QelSwitchTester *pQelSwitchTester = nullptr;
 };
 
 #endif // MAINWINDOW_H
