@@ -26,9 +26,8 @@ public:
     static constexpr ButtonType Info = ButtonType::Info;
 
     static constexpr ButtonSize Large = ButtonSize::Large;
-    static constexpr ButtonSize Medium = ButtonSize::Medium;
+    static constexpr ButtonSize Default = ButtonSize::Default;
     static constexpr ButtonSize Small = ButtonSize::Small;
-    static constexpr ButtonSize Mini = ButtonSize::Mini;
 
     static constexpr NativeButtonType Button = NativeButtonType::Button;
     static constexpr NativeButtonType Submit = NativeButtonType::Submit;
@@ -39,7 +38,7 @@ public:
     static constexpr VisualType Link = VisualType::Link;
 
     explicit QelButton(ButtonType type = ButtonType::Default,
-                       ButtonSize size = ButtonSize::Medium,
+                       ButtonSize size = ButtonSize::Default,
                        bool isPlain = false,
                        bool isRound = false,
                        bool isCircle = false,

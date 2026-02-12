@@ -78,7 +78,7 @@ QelIcon *icon = new QelIcon(QelIcon::Search, 16, this);
 ```cpp
 #include "QelButton.h"
 
-QelButton *button = new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Primary Button", this);
+QelButton *button = new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Primary Button", this);
 ```
 
 ### QelNumberInput 示例

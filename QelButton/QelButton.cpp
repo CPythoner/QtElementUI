@@ -266,14 +266,11 @@ void QelButton::updateButtonStyle() {
     case ButtonSize::Large:
         sizeStyle = "font-size: 16px; padding: 10px 20px;";
         break;
-    case ButtonSize::Medium:
+    case ButtonSize::Default:
         sizeStyle = "font-size: 14px; padding: 8px 16px;";
         break;
     case ButtonSize::Small:
         sizeStyle = "font-size: 13px; padding: 6px 12px;";
-        break;
-    case ButtonSize::Mini:
-        sizeStyle = "font-size: 12px; padding: 4px 8px;";
         break;
     }
 

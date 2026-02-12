@@ -5,9 +5,8 @@ namespace qel {
 
 enum class QelControlSize {
     Large,
-    Medium,
-    Small,
-    Mini
+    Default,
+    Small
 };
 
 // Semantic color type shared by multiple controls (not Button-specific).
