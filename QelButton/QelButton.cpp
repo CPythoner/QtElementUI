@@ -29,30 +29,48 @@ QelTheme::ButtonKind toButtonKind(QelButton::ButtonType type)
     }
 }
 
-QColor parseColorOrDefault(const QString &input, const QString &fallback)
+QColor semanticColor(QelButton::ButtonType type)
+{
+    switch (type) {
+    case QelButton::ButtonType::Primary:
+        return QColor("#409EFF");
+    case QelButton::ButtonType::Success:
+        return QColor("#67C23A");
+    case QelButton::ButtonType::Warning:
+        return QColor("#E6A23C");
+    case QelButton::ButtonType::Danger:
+        return QColor("#F56C6C");
+    case QelButton::ButtonType::Info:
+        return QColor("#909399");
+    case QelButton::ButtonType::Default:
+    default:
+        return QColor("#606266");
+    }
+}
+
+QColor parseColorOrDefault(const QString &input, const QColor &fallback)
 {
     const QColor fromInput(input);
     if (fromInput.isValid()) {
         return fromInput;
     }
 
-    return QColor(fallback);
+    return fallback;
 }
 
-void applyCustomColor(QelStyleHelper::StateStyleSet &styles, const QString &color, bool dark)
+void applyCustomColor(QelStyleHelper::StateStyleSet &styles, const QString &color)
 {
-    const QColor base = parseColorOrDefault(color, "#409EFF");
-    const QColor hover = base.lighter(112);
-    const QColor disabled = base.lighter(140);
-    const QString textColor = dark ? "#FFFFFF" : "#FFFFFF";
+    const QColor base = parseColorOrDefault(color, QColor("#409EFF"));
+    const QColor hover = base.lighter(110);
+    const QColor disabled = base.lighter(138);
 
     styles.normal.background = base.name();
     styles.normal.border = base.name();
-    styles.normal.text = textColor;
+    styles.normal.text = "#FFFFFF";
 
     styles.hover.background = hover.name();
     styles.hover.border = hover.name();
-    styles.hover.text = textColor;
+    styles.hover.text = "#FFFFFF";
 
     styles.active = styles.hover;
 
@@ -64,18 +82,20 @@ void applyCustomColor(QelStyleHelper::StateStyleSet &styles, const QString &colo
 }
 
 void applyTextLikeStyle(QelStyleHelper::StateStyleSet &styles,
+                        QelButton::ButtonType type,
                         bool isLink,
                         bool hasBackground)
 {
-    const QString baseColor = styles.normal.background;
-    const QColor semantic(baseColor);
-    const QString hoverText = semantic.isValid() ? semantic.lighter(112).name() : "#66B1FF";
-    const QString disabledText = semantic.isValid() ? semantic.lighter(135).name() : "#A0CFFF";
+    const QColor semantic = semanticColor(type);
+    const QString normalText = semantic.name();
+    const QString hoverText = semantic.lighter(115).name();
+    const QString disabledText = semantic.lighter(150).name();
 
     styles.normal.background = "transparent";
     styles.normal.border = "transparent";
+    styles.normal.text = normalText;
 
-    styles.hover.background = hasBackground ? "#ECF5FF" : "transparent";
+    styles.hover.background = hasBackground ? "#F2F3F5" : "transparent";
     styles.hover.border = "transparent";
     styles.hover.text = hoverText;
 
@@ -83,6 +103,7 @@ void applyTextLikeStyle(QelStyleHelper::StateStyleSet &styles,
 
     styles.focus.background = styles.hover.background;
     styles.focus.border = "transparent";
+    styles.focus.text = styles.hover.text;
 
     styles.disabled.background = "transparent";
     styles.disabled.border = "transparent";
@@ -120,6 +141,7 @@ QelButton::QelButton(ButtonType type,
     setIcon(icon);
     setProperty("qel-loading", isLoading_);
     setEnabled(!isLoading_);
+    setCursor(Qt::PointingHandCursor);
     updateButtonStyle();
 }
 
@@ -212,6 +234,7 @@ void QelButton::setColor(const QString &color)
 void QelButton::setDark(bool dark)
 {
     dark_ = dark;
+    Q_UNUSED(dark_);
     updateButtonStyle();
 }
 
@@ -222,11 +245,11 @@ void QelButton::updateButtonStyle() {
     QelStyleHelper::StateStyleSet styles = QelStyleHelper::buttonStateStyles(kind, isPlain_);
 
     if (!customColor_.isEmpty()) {
-        applyCustomColor(styles, customColor_, dark_);
+        applyCustomColor(styles, customColor_);
     }
 
     if (visualType_ == VisualType::Text || visualType_ == VisualType::Link) {
-        applyTextLikeStyle(styles, visualType_ == VisualType::Link, hasBackground_);
+        applyTextLikeStyle(styles, type_, visualType_ == VisualType::Link, hasBackground_);
     }
 
     style += QelStyleHelper::composeStateStyleSheet("QPushButton",
@@ -243,10 +266,10 @@ void QelButton::updateButtonStyle() {
         sizeStyle = "font-size: 14px; padding: 8px 16px;";
         break;
     case ButtonSize::Small:
-        sizeStyle = "font-size: 12px; padding: 6px 12px;";
+        sizeStyle = "font-size: 13px; padding: 6px 12px;";
         break;
     case ButtonSize::Mini:
-        sizeStyle = "font-size: 10px; padding: 4px 8px;";
+        sizeStyle = "font-size: 12px; padding: 4px 8px;";
         break;
     }
 
@@ -255,6 +278,10 @@ void QelButton::updateButtonStyle() {
         roundStyle = QString("border-radius: %1px;").arg(this->height() / 2);
     } else {
         roundStyle = "border-radius: 4px;";
+    }
+
+    if (visualType_ == VisualType::Link) {
+        roundStyle = "border-radius: 0px;";
     }
 
     if (isCircle_) {
