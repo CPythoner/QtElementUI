@@ -91,11 +91,15 @@ void applyTextLikeStyle(QelStyleHelper::StateStyleSet &styles,
     const QString hoverText = semantic.lighter(115).name();
     const QString disabledText = semantic.lighter(150).name();
 
-    styles.normal.background = "transparent";
+    const QString basicHoverBg = "#ecf5ff";
+    const QString alwaysOnBg = "#f4f4f5";
+    const QString alwaysOnHoverBg = "#e4e7ed";
+
+    styles.normal.background = hasBackground ? alwaysOnBg : "transparent";
     styles.normal.border = "transparent";
     styles.normal.text = normalText;
 
-    styles.hover.background = hasBackground ? "#F2F3F5" : "transparent";
+    styles.hover.background = hasBackground ? alwaysOnHoverBg : basicHoverBg;
     styles.hover.border = "transparent";
     styles.hover.text = hoverText;
 
@@ -105,7 +109,7 @@ void applyTextLikeStyle(QelStyleHelper::StateStyleSet &styles,
     styles.focus.border = "transparent";
     styles.focus.text = styles.hover.text;
 
-    styles.disabled.background = "transparent";
+    styles.disabled.background = hasBackground ? alwaysOnBg : "transparent";
     styles.disabled.border = "transparent";
     styles.disabled.text = disabledText;
 
