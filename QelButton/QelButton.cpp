@@ -224,27 +224,28 @@ void QelButton::updateButtonStyle() {
 
     style += QelStyleHelper::buttonStateStyleSheet(kind, isPlain_);
 
+    QString sizeStyle;
     switch (size_) {
-    case Large: style += " font-size: 16px; padding: 10px 20px;"; break;
-    case Medium: style += " font-size: 14px; padding: 8px 16px;"; break;
-    case Small: style += " font-size: 12px; padding: 6px 12px;"; break;
-    case Mini: style += " font-size: 10px; padding: 4px 8px;"; break;
+    case Large: sizeStyle = "font-size: 16px; padding: 10px 20px;"; break;
+    case Medium: sizeStyle = "font-size: 14px; padding: 8px 16px;"; break;
+    case Small: sizeStyle = "font-size: 12px; padding: 6px 12px;"; break;
+    case Mini: sizeStyle = "font-size: 10px; padding: 4px 8px;"; break;
     }
 
-    QString roundQSS;
+    QString roundStyle;
 
     if (isRound_) {
-        roundQSS = QString(" border-radius: %1px;").arg(this->height()/2);
+        roundStyle = QString("border-radius: %1px;").arg(this->height()/2);
     } else {
-        roundQSS = " border-radius: 4px;";
+        roundStyle = "border-radius: 4px;";
     }
 
     if (isCircle_) {
-        roundQSS = QString(" border-radius: %1px;").arg(this->height()/2);
+        roundStyle = QString("border-radius: %1px;").arg(this->height()/2);
         setFixedWidth(this->height());
     }
 
-    style += roundQSS + " }";
+    style += QString("QPushButton { %1 %2 }").arg(sizeStyle, roundStyle);
 
     this->setStyleSheet(style);
 }

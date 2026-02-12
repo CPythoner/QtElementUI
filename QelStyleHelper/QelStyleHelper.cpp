@@ -66,7 +66,7 @@ QString QelStyleHelper::composeStateStyleSheet(const QString &baseSelector,
                                                bool disableFocusOutline)
 {
     QString style;
-    style += QString("%1 { background-color: %2; color: %3; border: 1px solid %4;")
+    style += QString("%1 { background-color: %2; color: %3; border: 1px solid %4; }")
                  .arg(baseSelector)
                  .arg(styles.normal.background)
                  .arg(styles.normal.text)
