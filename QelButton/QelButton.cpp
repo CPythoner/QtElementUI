@@ -132,8 +132,8 @@ QelButton::QelButton(ButtonType type,
                      NativeButtonType nativeType,
                      const QIcon &icon,
                      const QString &text,
-                     QWidget *parent,
-                     bool hasBackground)
+                     bool hasBackground,
+                     QWidget *parent)
     : QPushButton(text, parent)
     , type_(type)
     , size_(size)
