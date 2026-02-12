@@ -26,14 +26,31 @@ struct QelStateContext {
 
 class QelStyleHelper {
 public:
-    struct ButtonStyle {
+    struct ComponentStyle {
         QString background;
         QString text;
         QString border;
     };
 
+    struct StateStyleSet {
+        ComponentStyle normal;
+        ComponentStyle hover;
+        ComponentStyle active;
+        ComponentStyle focus;
+        ComponentStyle disabled;
+        ComponentStyle loading;
+    };
+
     static QelVisualState resolveState(const QelStateContext &ctx);
-    static ButtonStyle buttonStyle(QelTheme::ButtonKind kind, bool isPlain, QelVisualState state);
+    static ComponentStyle buttonStyle(QelTheme::ButtonKind kind, bool isPlain, QelVisualState state);
+    static StateStyleSet buttonStateStyles(QelTheme::ButtonKind kind, bool isPlain);
+
+    static QString composeStateStyleSheet(const QString &baseSelector,
+                                          const QString &loadingSelector,
+                                          const StateStyleSet &styles,
+                                          bool disableFocusOutline = false);
+
+    static QString buttonStateStyleSheet(QelTheme::ButtonKind kind, bool isPlain);
 };
 
 } // namespace qel

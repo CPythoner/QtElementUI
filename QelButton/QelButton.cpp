@@ -222,48 +222,7 @@ void QelButton::updateButtonStyle() {
         break;
     }
 
-    const QelStyleHelper::ButtonStyle normalStyle =
-        QelStyleHelper::buttonStyle(kind, isPlain_, QelVisualState::Normal);
-    const QelStyleHelper::ButtonStyle hoverStyleToken =
-        QelStyleHelper::buttonStyle(kind, isPlain_, QelVisualState::Hover);
-    const QelStyleHelper::ButtonStyle activeStyleToken =
-        QelStyleHelper::buttonStyle(kind, isPlain_, QelVisualState::Active);
-    const QelStyleHelper::ButtonStyle focusStyleToken =
-        QelStyleHelper::buttonStyle(kind, isPlain_, QelVisualState::Focus);
-    const QelStyleHelper::ButtonStyle disabledStyleToken =
-        QelStyleHelper::buttonStyle(kind, isPlain_, QelVisualState::Disabled);
-    const QelStyleHelper::ButtonStyle loadingStyleToken =
-        QelStyleHelper::buttonStyle(kind, isPlain_, QelVisualState::Loading);
-
-    style += QString("QPushButton { background-color: %1; color: %2; border: 1px solid %3;")
-                 .arg(normalStyle.background)
-                 .arg(normalStyle.text)
-                 .arg(normalStyle.border);
-
-    QString hoverStyle = QString("QPushButton:hover { background-color: %1; color: %2; border: 1px solid %3; }")
-                             .arg(hoverStyleToken.background)
-                             .arg(hoverStyleToken.text)
-                             .arg(hoverStyleToken.border);
-
-    QString activeStyle = QString("QPushButton:pressed { background-color: %1; color: %2; border: 1px solid %3; }")
-                              .arg(activeStyleToken.background)
-                              .arg(activeStyleToken.text)
-                              .arg(activeStyleToken.border);
-
-    QString focusStyle = QString("QPushButton:focus { background-color: %1; color: %2; border: 1px solid %3; outline: none; }")
-                             .arg(focusStyleToken.background)
-                             .arg(focusStyleToken.text)
-                             .arg(focusStyleToken.border);
-
-    QString disabledStyle = QString("QPushButton:disabled { background-color: %1; color: %2; border: 1px solid %3; }")
-                                .arg(disabledStyleToken.background)
-                                .arg(disabledStyleToken.text)
-                                .arg(disabledStyleToken.border);
-
-    QString loadingStyle = QString("QPushButton[qel-loading=\"true\"] { background-color: %1; color: %2; border: 1px solid %3; }")
-                               .arg(loadingStyleToken.background)
-                               .arg(loadingStyleToken.text)
-                               .arg(loadingStyleToken.border);
+    style += QelStyleHelper::buttonStateStyleSheet(kind, isPlain_);
 
     switch (size_) {
     case Large: style += " font-size: 16px; padding: 10px 20px;"; break;
@@ -286,11 +245,6 @@ void QelButton::updateButtonStyle() {
     }
 
     style += roundQSS + " }";
-    style += hoverStyle;
-    style += activeStyle;
-    style += focusStyle;
-    style += disabledStyle;
-    style += loadingStyle;
 
     this->setStyleSheet(style);
 }
