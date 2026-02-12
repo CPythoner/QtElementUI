@@ -82,6 +82,41 @@ public:
         }
         addButtonRow(mainLayout, "Disabled Plain Buttons", disabledPlainButtons);
 
+        QList<QelButton *> textButtons;
+        textButtons.append(new QelButton(QelButton::Default, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Default Text", this));
+        textButtons.append(new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Primary Text", this));
+        textButtons.append(new QelButton(QelButton::Success, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Success Text", this));
+        for (QelButton *button : textButtons) {
+            button->setTextMode(true);
+            button->setBg(true);
+        }
+        addButtonRow(mainLayout, "Text Buttons", textButtons);
+
+        QList<QelButton *> linkButtons;
+        linkButtons.append(new QelButton(QelButton::Default, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Default Link", this));
+        linkButtons.append(new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Primary Link", this));
+        linkButtons.append(new QelButton(QelButton::Danger, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Danger Link", this));
+        for (QelButton *button : linkButtons) {
+            button->setLinkMode(true);
+        }
+        addButtonRow(mainLayout, "Link Buttons", linkButtons);
+
+        QList<QelButton *> customColorButtons;
+        QelButton *customTeal = new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Custom #13c2c2", this);
+        customTeal->setColor("#13c2c2");
+        QelButton *customPurple = new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Custom #722ed1", this);
+        customPurple->setColor("#722ed1");
+        customColorButtons.append(customTeal);
+        customColorButtons.append(customPurple);
+        addButtonRow(mainLayout, "Custom Color Buttons", customColorButtons);
+
+        QList<QelButton *> sizeButtons;
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Large, false, false, false, false, QelButton::Button, QIcon(), "Large", this));
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Medium, false, false, false, false, QelButton::Button, QIcon(), "Medium", this));
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Small, false, false, false, false, QelButton::Button, QIcon(), "Small", this));
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Mini, false, false, false, false, QelButton::Button, QIcon(), "Mini", this));
+        addButtonRow(mainLayout, "Button Sizes", sizeButtons);
+
         addPopupAndAnimationDemo(mainLayout);
         setLayout(mainLayout);
     }

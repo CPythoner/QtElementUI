@@ -10,15 +10,23 @@ enum class QelControlSize {
     Mini
 };
 
-enum class QelButtonType {
+// Semantic color type shared by multiple controls (not Button-specific).
+enum class QelSemanticType {
     Default,
     Primary,
     Success,
     Warning,
     Danger,
-    Info,
-    Text
+    Info
 };
+
+enum class QelButtonVisualType {
+    Filled,
+    Text,
+    Link
+};
+
+using QelButtonType = QelSemanticType;
 
 enum class QelNativeButtonType {
     Button,
