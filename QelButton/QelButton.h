@@ -25,9 +25,9 @@ public:
     static constexpr ButtonType Danger = ButtonType::Danger;
     static constexpr ButtonType Info = ButtonType::Info;
 
-    static constexpr ButtonSize Large = ButtonSize::Large;
-    static constexpr ButtonSize Default = ButtonSize::Default;
-    static constexpr ButtonSize Small = ButtonSize::Small;
+    static constexpr ButtonSize LargeSize = ButtonSize::Large;
+    static constexpr ButtonSize DefaultSize = ButtonSize::Default;
+    static constexpr ButtonSize SmallSize = ButtonSize::Small;
 
     static constexpr NativeButtonType Button = NativeButtonType::Button;
     static constexpr NativeButtonType Submit = NativeButtonType::Submit;

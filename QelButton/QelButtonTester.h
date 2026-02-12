@@ -24,68 +24,68 @@ public:
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
         QList<QelButton *> defaultButtons;
-        defaultButtons.append(new QelButton(QelButton::Default, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Default", this));
-        defaultButtons.append(new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Primary", this));
-        defaultButtons.append(new QelButton(QelButton::Success, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Success", this));
-        defaultButtons.append(new QelButton(QelButton::Info, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Info", this));
-        defaultButtons.append(new QelButton(QelButton::Warning, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Warning", this));
-        defaultButtons.append(new QelButton(QelButton::Danger, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Danger", this));
+        defaultButtons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Default", this));
+        defaultButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Primary", this));
+        defaultButtons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Success", this));
+        defaultButtons.append(new QelButton(QelButton::Info, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Info", this));
+        defaultButtons.append(new QelButton(QelButton::Warning, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Warning", this));
+        defaultButtons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Danger", this));
         addButtonRow(mainLayout, "Default Buttons", defaultButtons);
 
         QList<QelButton *> plainButtons;
-        plainButtons.append(new QelButton(QelButton::Default, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Plain", this));
-        plainButtons.append(new QelButton(QelButton::Primary, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Primary", this));
-        plainButtons.append(new QelButton(QelButton::Success, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Success", this));
-        plainButtons.append(new QelButton(QelButton::Info, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Info", this));
-        plainButtons.append(new QelButton(QelButton::Warning, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Warning", this));
-        plainButtons.append(new QelButton(QelButton::Danger, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Danger", this));
+        plainButtons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Plain", this));
+        plainButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Primary", this));
+        plainButtons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Success", this));
+        plainButtons.append(new QelButton(QelButton::Info, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Info", this));
+        plainButtons.append(new QelButton(QelButton::Warning, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Warning", this));
+        plainButtons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Danger", this));
         addButtonRow(mainLayout, "Plain Buttons", plainButtons);
 
         QList<QelButton *> roundButtons;
-        roundButtons.append(new QelButton(QelButton::Primary, QelButton::Default, false, true, false, false, QelButton::Button, QIcon(), "Primary", this));
-        roundButtons.append(new QelButton(QelButton::Success, QelButton::Default, false, true, false, false, QelButton::Button, QIcon(), "Success", this));
-        roundButtons.append(new QelButton(QelButton::Info, QelButton::Default, false, true, false, false, QelButton::Button, QIcon(), "Info", this));
-        roundButtons.append(new QelButton(QelButton::Warning, QelButton::Default, false, true, false, false, QelButton::Button, QIcon(), "Warning", this));
-        roundButtons.append(new QelButton(QelButton::Danger, QelButton::Default, false, true, false, false, QelButton::Button, QIcon(), "Danger", this));
+        roundButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, true, false, false, QelButton::Button, QIcon(), "Primary", this));
+        roundButtons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, false, true, false, false, QelButton::Button, QIcon(), "Success", this));
+        roundButtons.append(new QelButton(QelButton::Info, QelButton::DefaultSize, false, true, false, false, QelButton::Button, QIcon(), "Info", this));
+        roundButtons.append(new QelButton(QelButton::Warning, QelButton::DefaultSize, false, true, false, false, QelButton::Button, QIcon(), "Warning", this));
+        roundButtons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, false, true, false, false, QelButton::Button, QIcon(), "Danger", this));
         addButtonRow(mainLayout, "Round Buttons", roundButtons);
 
         QList<QelButton *> iconButtons;
-        iconButtons.append(new QelButton(QelButton::Default, QelButton::Small, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Search, 16, Qt::gray), "", this));
-        iconButtons.append(new QelButton(QelButton::Primary, QelButton::Small, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Edit, 16, Qt::white), "", this));
-        iconButtons.append(new QelButton(QelButton::Success, QelButton::Small, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Check, 16, Qt::white), "", this));
-        iconButtons.append(new QelButton(QelButton::Info, QelButton::Small, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Envelope, 16, Qt::white), "", this));
-        iconButtons.append(new QelButton(QelButton::Warning, QelButton::Small, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Star, 16, Qt::white), "", this));
-        iconButtons.append(new QelButton(QelButton::Danger, QelButton::Small, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Trash, 16, Qt::white), "", this));
+        iconButtons.append(new QelButton(QelButton::Default, QelButton::SmallSize, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Search, 16, Qt::gray), "", this));
+        iconButtons.append(new QelButton(QelButton::Primary, QelButton::SmallSize, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Edit, 16, Qt::white), "", this));
+        iconButtons.append(new QelButton(QelButton::Success, QelButton::SmallSize, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Check, 16, Qt::white), "", this));
+        iconButtons.append(new QelButton(QelButton::Info, QelButton::SmallSize, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Envelope, 16, Qt::white), "", this));
+        iconButtons.append(new QelButton(QelButton::Warning, QelButton::SmallSize, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Star, 16, Qt::white), "", this));
+        iconButtons.append(new QelButton(QelButton::Danger, QelButton::SmallSize, false, true, true, false, QelButton::Button, QelIcon(QelIcon::Trash, 16, Qt::white), "", this));
         addButtonRow(mainLayout, "Icon Buttons", iconButtons);
 
         QList<QelButton *> disabledButtons;
-        disabledButtons.append(new QelButton(QelButton::Default, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Default", this));
-        disabledButtons.append(new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Primary", this));
-        disabledButtons.append(new QelButton(QelButton::Success, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Success", this));
-        disabledButtons.append(new QelButton(QelButton::Info, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Info", this));
-        disabledButtons.append(new QelButton(QelButton::Warning, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Warning", this));
-        disabledButtons.append(new QelButton(QelButton::Danger, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Danger", this));
+        disabledButtons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Default", this));
+        disabledButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Primary", this));
+        disabledButtons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Success", this));
+        disabledButtons.append(new QelButton(QelButton::Info, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Info", this));
+        disabledButtons.append(new QelButton(QelButton::Warning, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Warning", this));
+        disabledButtons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Danger", this));
         for (QelButton *button : disabledButtons) {
             button->setDisabled(true);
         }
         addButtonRow(mainLayout, "Disabled Buttons", disabledButtons);
 
         QList<QelButton *> disabledPlainButtons;
-        disabledPlainButtons.append(new QelButton(QelButton::Default, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Default", this));
-        disabledPlainButtons.append(new QelButton(QelButton::Primary, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Primary", this));
-        disabledPlainButtons.append(new QelButton(QelButton::Success, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Success", this));
-        disabledPlainButtons.append(new QelButton(QelButton::Info, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Info", this));
-        disabledPlainButtons.append(new QelButton(QelButton::Warning, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Warning", this));
-        disabledPlainButtons.append(new QelButton(QelButton::Danger, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Danger", this));
+        disabledPlainButtons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Default", this));
+        disabledPlainButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Primary", this));
+        disabledPlainButtons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Success", this));
+        disabledPlainButtons.append(new QelButton(QelButton::Info, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Info", this));
+        disabledPlainButtons.append(new QelButton(QelButton::Warning, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Warning", this));
+        disabledPlainButtons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Danger", this));
         for (QelButton *button : disabledPlainButtons) {
             button->setDisabled(true);
         }
         addButtonRow(mainLayout, "Disabled Plain Buttons", disabledPlainButtons);
 
         QList<QelButton *> textButtons;
-        textButtons.append(new QelButton(QelButton::Default, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Default Text", this));
-        textButtons.append(new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Primary Text", this));
-        textButtons.append(new QelButton(QelButton::Success, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Success Text", this));
+        textButtons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Default Text", this));
+        textButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Primary Text", this));
+        textButtons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Success Text", this));
         for (QelButton *button : textButtons) {
             button->setTextMode(true);
             button->setBg(true);
@@ -93,27 +93,27 @@ public:
         addButtonRow(mainLayout, "Text Buttons", textButtons);
 
         QList<QelButton *> linkButtons;
-        linkButtons.append(new QelButton(QelButton::Default, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Default Link", this));
-        linkButtons.append(new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Primary Link", this));
-        linkButtons.append(new QelButton(QelButton::Danger, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Danger Link", this));
+        linkButtons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Default Link", this));
+        linkButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Primary Link", this));
+        linkButtons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Danger Link", this));
         for (QelButton *button : linkButtons) {
             button->setLinkMode(true);
         }
         addButtonRow(mainLayout, "Link Buttons", linkButtons);
 
         QList<QelButton *> customColorButtons;
-        QelButton *customTeal = new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Custom #13c2c2", this);
+        QelButton *customTeal = new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Custom #13c2c2", this);
         customTeal->setColor("#13c2c2");
-        QelButton *customPurple = new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Custom #722ed1", this);
+        QelButton *customPurple = new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Custom #722ed1", this);
         customPurple->setColor("#722ed1");
         customColorButtons.append(customTeal);
         customColorButtons.append(customPurple);
         addButtonRow(mainLayout, "Custom Color Buttons", customColorButtons);
 
         QList<QelButton *> sizeButtons;
-        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Large, false, false, false, false, QelButton::Button, QIcon(), "Large", this));
-        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Default", this));
-        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::Small, false, false, false, false, QelButton::Button, QIcon(), "Small", this));
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::LargeSize, false, false, false, false, QelButton::Button, QIcon(), "Large", this));
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Default", this));
+        sizeButtons.append(new QelButton(QelButton::Primary, QelButton::SmallSize, false, false, false, false, QelButton::Button, QIcon(), "Small", this));
         addButtonRow(mainLayout, "Button Sizes", sizeButtons);
 
         addElementPlusLinkTextShowcase(mainLayout);
@@ -219,12 +219,12 @@ private:
     QList<QelButton *> makeElementSemanticButtons(QWidget *parent)
     {
         QList<QelButton *> buttons;
-        buttons.append(new QelButton(QelButton::Default, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "plain", parent));
-        buttons.append(new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "primary", parent));
-        buttons.append(new QelButton(QelButton::Success, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "success", parent));
-        buttons.append(new QelButton(QelButton::Info, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "info", parent));
-        buttons.append(new QelButton(QelButton::Warning, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "warning", parent));
-        buttons.append(new QelButton(QelButton::Danger, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "danger", parent));
+        buttons.append(new QelButton(QelButton::Default, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "plain", parent));
+        buttons.append(new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "primary", parent));
+        buttons.append(new QelButton(QelButton::Success, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "success", parent));
+        buttons.append(new QelButton(QelButton::Info, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "info", parent));
+        buttons.append(new QelButton(QelButton::Warning, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "warning", parent));
+        buttons.append(new QelButton(QelButton::Danger, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "danger", parent));
         return buttons;
     }
 
@@ -245,9 +245,9 @@ private:
         layout->addWidget(title);
 
         QHBoxLayout *demoRow = new QHBoxLayout();
-        QelButton *showPopupButton = new QelButton(QelButton::Primary, QelButton::Default, false, false, false, false, QelButton::Button, QIcon(), "Show Popup", this);
-        QelButton *fadeButton = new QelButton(QelButton::Success, QelButton::Default, true, false, false, false, QelButton::Button, QIcon(), "Fade In/Out", this);
-        QelButton *pressEffectButton = new QelButton(QelButton::Warning, QelButton::Default, false, true, false, false, QelButton::Button, QIcon(), "Press Feedback", this);
+        QelButton *showPopupButton = new QelButton(QelButton::Primary, QelButton::DefaultSize, false, false, false, false, QelButton::Button, QIcon(), "Show Popup", this);
+        QelButton *fadeButton = new QelButton(QelButton::Success, QelButton::DefaultSize, true, false, false, false, QelButton::Button, QIcon(), "Fade In/Out", this);
+        QelButton *pressEffectButton = new QelButton(QelButton::Warning, QelButton::DefaultSize, false, true, false, false, QelButton::Button, QIcon(), "Press Feedback", this);
 
         animationTarget_ = new QLabel("Animation Target", this);
         animationTarget_->setMinimumWidth(140);
