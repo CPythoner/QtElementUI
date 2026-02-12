@@ -29,7 +29,8 @@ SOURCES += \
 
 HEADERS += \
         QelButton.h \
-        QelButtonTester.h
+        QelButtonTester.h \
+        ../QelCommon/QelControlTypes.h
 
 DISTFILES += \
     QelButton.pri

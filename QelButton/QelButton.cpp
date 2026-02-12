@@ -184,9 +184,9 @@ void QelButton::setAutofocus(bool autofocus) {
 void QelButton::setNativeType(NativeButtonType nativeType) {
     nativeType_ = nativeType;
     // 设置为表单按钮类型（submit, reset, button）
-    if (nativeType == Submit) {
+    if (nativeType == NativeButtonType::Submit) {
         setProperty("type", "submit");
-    } else if (nativeType == Reset) {
+    } else if (nativeType == NativeButtonType::Reset) {
         setProperty("type", "reset");
     } else {
         setProperty("type", "button");
@@ -198,25 +198,25 @@ void QelButton::updateButtonStyle() {
 
     QelTheme::ButtonKind kind = QelTheme::ButtonKind::Default;
     switch (type_) {
-    case Primary:
+    case ButtonType::Primary:
         kind = QelTheme::ButtonKind::Primary;
         break;
-    case Success:
+    case ButtonType::Success:
         kind = QelTheme::ButtonKind::Success;
         break;
-    case Warning:
+    case ButtonType::Warning:
         kind = QelTheme::ButtonKind::Warning;
         break;
-    case Danger:
+    case ButtonType::Danger:
         kind = QelTheme::ButtonKind::Danger;
         break;
-    case Info:
+    case ButtonType::Info:
         kind = QelTheme::ButtonKind::Info;
         break;
-    case Text:
+    case ButtonType::Text:
         kind = QelTheme::ButtonKind::Text;
         break;
-    case Default:
+    case ButtonType::Default:
     default:
         kind = QelTheme::ButtonKind::Default;
         break;
@@ -226,10 +226,10 @@ void QelButton::updateButtonStyle() {
 
     QString sizeStyle;
     switch (size_) {
-    case Large: sizeStyle = "font-size: 16px; padding: 10px 20px;"; break;
-    case Medium: sizeStyle = "font-size: 14px; padding: 8px 16px;"; break;
-    case Small: sizeStyle = "font-size: 12px; padding: 6px 12px;"; break;
-    case Mini: sizeStyle = "font-size: 10px; padding: 4px 8px;"; break;
+    case ButtonSize::Large: sizeStyle = "font-size: 16px; padding: 10px 20px;"; break;
+    case ButtonSize::Medium: sizeStyle = "font-size: 14px; padding: 8px 16px;"; break;
+    case ButtonSize::Small: sizeStyle = "font-size: 12px; padding: 6px 12px;"; break;
+    case ButtonSize::Mini: sizeStyle = "font-size: 10px; padding: 4px 8px;"; break;
     }
 
     QString roundStyle;
