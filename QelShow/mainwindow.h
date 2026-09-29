@@ -15,6 +15,7 @@
 #include "../QelSwitch/QelSwitchTester.h"
 #include "../QelForm/QelFormTester.h"
 #include "../QelTooltip/QelTooltipTester.h"
+#include "../QelTag/QelTagTester.h"
 
 namespace Ui {
 class MainWindow;
@@ -46,6 +47,7 @@ private:
     QelSwitchTester *pQelSwitchTester = nullptr;
     QelFormTester *pQelFormTester = nullptr;
     QelTooltipTester *pQelTooltipTester = nullptr;
+    QelTagTester *pQelTagTester = nullptr;
 };
 
 #endif // MAINWINDOW_H
