@@ -1,5 +1,7 @@
 #include "QelTheme.h"
 
+#include <QColor>
+
 namespace qel {
 
 const QelTheme::ColorTokens &QelTheme::colors()
@@ -35,6 +37,40 @@ const QelTheme::ColorTokens &QelTheme::colors()
     };
 
     return tokens;
+}
+
+QString QelTheme::semanticColor(QelSemanticType type)
+{
+    const ColorTokens &c = colors();
+
+    switch (type) {
+    case QelSemanticType::Success:
+        return c.success;
+    case QelSemanticType::Warning:
+        return c.warning;
+    case QelSemanticType::Danger:
+        return c.danger;
+    case QelSemanticType::Info:
+        return c.info;
+    case QelSemanticType::Primary:
+        return c.primary;
+    case QelSemanticType::Default:
+    default:
+        return c.textRegular;
+    }
+}
+
+QString QelTheme::semanticLightColor(QelSemanticType type, int level)
+{
+    const QColor base(semanticColor(type));
+    const int safeLevel = qBound(0, level, 9);
+    const qreal whiteRatio = safeLevel / 10.0;
+
+    const int red = qRound(base.red() * (1.0 - whiteRatio) + 255.0 * whiteRatio);
+    const int green = qRound(base.green() * (1.0 - whiteRatio) + 255.0 * whiteRatio);
+    const int blue = qRound(base.blue() * (1.0 - whiteRatio) + 255.0 * whiteRatio);
+
+    return QColor(red, green, blue).name();
 }
 
 QelTheme::ButtonColors QelTheme::buttonColors(ButtonKind kind, bool isPlain)

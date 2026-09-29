@@ -16,6 +16,7 @@
     - [QelRadio 示例](#qelradio-示例)
     - [QelSwitch 示例](#qelswitch-示例)
     - [QelTooltip 示例](#qeltooltip-示例)
+    - [QelTag 示例](#qeltag-示例)
   - [自定义](#自定义)
 
 # QelElementUI 项目
@@ -59,7 +60,7 @@ include($$PWD/../QelButton/QelButton.pri)
 
 ### QelShow 功能
 
-- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip` 等。
+- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip`、`QelTag` 等。
 
 - 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
@@ -205,3 +206,29 @@ popper class/style, and screen boundary handling through `QelPopupManager`.
 Web-only implementation details such as Popper.js options, GPU acceleration,
 teleport targets, and browser positioning strategies are intentionally mapped
 to Qt infrastructure instead of being copied as fake C++ APIs.
+
+
+### QelTag 示例
+
+```cpp
+#include "QelTag.h"
+
+qel::QelTag *tag = new qel::QelTag(
+    "Success",
+    qel::QelTag::Success,
+    qel::QelTag::Default,
+    qel::QelTag::Effect::Light,
+    this);
+
+tag->setClosable(true);
+tag->setRound(true);
+
+connect(tag, &qel::QelTag::closeRequested, this, [tag]() {
+    tag->hide();
+});
+```
+
+`QelTag` aligns with Element Plus 2.14.6 Tag semantics:
+`type`, `closable`, `disable-transitions`, `hit`, `color`, `size`,
+`effect` and `round`. The close control emits `closeRequested()` and
+does not automatically remove the tag; removal remains the caller's decision.

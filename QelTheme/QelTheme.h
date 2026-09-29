@@ -3,6 +3,8 @@
 
 #include <QString>
 
+#include "../QelCommon/QelControlTypes.h"
+
 namespace qel {
 
 class QelTheme {
@@ -60,6 +62,8 @@ public:
     };
 
     static const ColorTokens &colors();
+    static QString semanticColor(QelSemanticType type);
+    static QString semanticLightColor(QelSemanticType type, int level);
     static ButtonColors buttonColors(ButtonKind kind, bool isPlain);
 
 private:
