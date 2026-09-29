@@ -15,8 +15,8 @@ HEADERS += \
     QelBadgeTester.h
 
 include($$PWD/QelBadge.pri)
-include($PWD/../QelButton/QelButton.pri)
-include($PWD/../QelIcon/QelIcon.pri)
+include($$PWD/../QelButton/QelButton.pri)
+include($$PWD/../QelIcon/QelIcon.pri)
 include($$PWD/../QelTag/QelTag.pri)
 
 DISTFILES += \
