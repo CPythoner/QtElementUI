@@ -1,6 +1,7 @@
 #include "QelButton.h"
 
 #include <QColor>
+#include <QVariant>
 
 #include "../QelStyleHelper/QelStyleHelper.h"
 #include "../QelTheme/QelTheme.h"

@@ -21,3 +21,5 @@ DISTFILES += \
     QelSelect.pri
 
 include($$PWD/../QelIcon/QelIcon.pri)
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

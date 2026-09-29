@@ -25,3 +25,5 @@ HEADERS += \
 
 DISTFILES += \
     QelInput.pri
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

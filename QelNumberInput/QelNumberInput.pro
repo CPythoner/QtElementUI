@@ -23,3 +23,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     QelNumberInput.pri
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

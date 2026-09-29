@@ -15,11 +15,12 @@
     - [QelCheckbox 示例](#qelcheckbox-示例)
     - [QelRadio 示例](#qelradio-示例)
     - [QelSwitch 示例](#qelswitch-示例)
+    - [QelTooltip 示例](#qeltooltip-示例)
   - [自定义](#自定义)
 
 # QelElementUI 项目
 
-QelElementUI 是一个基于 Qt 的自定义控件库，模仿了 Element UI 的部分组件，实现了类似的功能。此项目的主要目标是提供一个在 Qt 环境中使用的现代化 UI 组件集合。
+QelElementUI 是一个基于 Qt Widgets 的现代化控件库，组件功能、交互语义与视觉规范优先对齐 Element Plus，并使用 Qt-native API 实现对应能力。
 
 ## 安装
 
@@ -49,7 +50,7 @@ include($$PWD/../QelButton/QelButton.pri)
 
 ### QelShow 功能
 
-- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch` 等。
+- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip` 等。
 
 - 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
@@ -157,3 +158,41 @@ qel::QelRadio *radio = new qel::QelRadio(
 qel::QelSwitch *sw = new qel::QelSwitch(this);
 sw->setChecked(true);
 ```
+
+
+### QelTooltip 示例
+
+```cpp
+#include "QelTooltip.h"
+
+QelButton *button = new QelButton(
+    QelButton::Default,
+    QelButton::DefaultSize,
+    false,
+    false,
+    false,
+    false,
+    QelButton::Button,
+    QIcon(),
+    "Hover me",
+    this);
+
+qel::QelTooltip *tooltip = new qel::QelTooltip(button, button);
+tooltip->setContent("Tooltip content");
+tooltip->setPlacement(qel::QelTooltip::Placement::Top);
+tooltip->setEffect(qel::QelTooltip::Effect::Dark);
+tooltip->setTrigger(qel::QelTooltip::Trigger::Hover);
+tooltip->setShowAfter(0);
+tooltip->setHideAfter(200);
+```
+
+`QelTooltip` follows the Element Plus tooltip behavior model. Qt mappings
+cover 12 placements, fallback placements, dark/light effects, raw/custom
+content, controlled visibility, disabled state, offset, show-arrow,
+arrow-offset, show-after, hide-after, auto-close, hover/focus/click/contextmenu
+triggers, trigger keys, focus-on-target, enterable content, persistence,
+popper class/style, and screen boundary handling through `QelPopupManager`.
+
+Web-only implementation details such as Popper.js options, GPU acceleration,
+teleport targets, and browser positioning strategies are intentionally mapped
+to Qt infrastructure instead of being copied as fake C++ APIs.

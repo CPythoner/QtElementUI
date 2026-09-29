@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pQelRadioTester = new QelRadioTester(this);
     pQelSwitchTester = new QelSwitchTester(this);
     pQelFormTester = new QelFormTester(this);
+    pQelTooltipTester = new QelTooltipTester(this);
 
     // 创建页面与树项映射关系
     pageMap["QelIcon"] = pQelIconTester;
@@ -33,10 +34,12 @@ MainWindow::MainWindow(QWidget *parent) :
     pageMap["QelRadio"] = pQelRadioTester;
     pageMap["QelSwitch"] = pQelSwitchTester;
     pageMap["QelForm"] = pQelFormTester;
+    pageMap["QelTooltip"] = pQelTooltipTester;
 
     // 添加树状列表分组与项目
     QTreeWidgetItem *basicGroup = addTreeItem(treeWidget, "基础组件");
     QTreeWidgetItem *formGroup = addTreeItem(treeWidget, "表单组件");
+    QTreeWidgetItem *feedbackGroup = addTreeItem(treeWidget, "反馈组件");
 
     addTreeItem(basicGroup, "QelIcon");
     addTreeItem(basicGroup, "QelButton");
@@ -47,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addTreeItem(formGroup, "QelRadio");
     addTreeItem(formGroup, "QelSwitch");
     addTreeItem(formGroup, "QelForm");
+    addTreeItem(feedbackGroup, "QelTooltip");
 
     treeWidget->expandAll();
 

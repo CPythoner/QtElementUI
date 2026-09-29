@@ -171,9 +171,11 @@ void QelInput::updatePasswordAction()
     }
 
     if (type_ == Type::Password && showPassword_) {
-        passwordAction_ = lineEdit_->addAction(
-            passwordVisible_ ? "Hide" : "Show",
-            QLineEdit::TrailingPosition);
+        auto *action = new QAction(
+            passwordVisible_ ? QStringLiteral("Hide") : QStringLiteral("Show"),
+            lineEdit_);
+        lineEdit_->addAction(action, QLineEdit::TrailingPosition);
+        passwordAction_ = action;
         connect(
             passwordAction_,
             &QAction::triggered,

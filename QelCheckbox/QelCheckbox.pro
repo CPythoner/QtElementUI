@@ -15,3 +15,5 @@ HEADERS += \
 
 DISTFILES += \
     QelCheckbox.pri
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

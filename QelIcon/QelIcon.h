@@ -801,7 +801,8 @@ private:
         if (!loaded) {
             // 尝试从系统中获取 FontAwesome 字体
             family = "FontAwesome";
-            if (!QFontDatabase::families().contains(family)) {
+            QFontDatabase fontDb;
+            if (!fontDb.families().contains(family)) {
                 // 如果系统中没有，则从资源文件中加载
                 int id = QFontDatabase::addApplicationFont(":/fonts/fonts/fontawesome-4.7.0.ttf");
                 if (id != -1) {

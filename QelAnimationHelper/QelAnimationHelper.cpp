@@ -2,11 +2,33 @@
 
 #include <QAbstractAnimation>
 #include <QGraphicsOpacityEffect>
+#include <QList>
 #include <QPointer>
 #include <QPropertyAnimation>
+#include <QString>
 #include <QWidget>
 
 namespace qel {
+
+namespace {
+
+const char *kFadeAnimationObjectName = "qel-fade-animation";
+
+void stopExistingFadeAnimation(QWidget *target)
+{
+    const QList<QPropertyAnimation *> animations =
+        target->findChildren<QPropertyAnimation *>(
+            kFadeAnimationObjectName,
+            Qt::FindDirectChildrenOnly);
+
+    for (QPropertyAnimation *animation : animations) {
+        animation->stop();
+        animation->setObjectName(QString());
+        animation->deleteLater();
+    }
+}
+
+} // namespace
 
 bool QelAnimationHelper::animationEnabled_ = true;
 
@@ -26,25 +48,38 @@ void QelAnimationHelper::fadeIn(QWidget *target, int duration)
         return;
     }
 
+    stopExistingFadeAnimation(target);
     target->show();
 
     if (!animationEnabled_) {
+        if (auto *effect =
+                qobject_cast<QGraphicsOpacityEffect *>(target->graphicsEffect())) {
+            effect->setOpacity(1.0);
+        }
         target->setWindowOpacity(1.0);
         return;
     }
 
     auto *effect = qobject_cast<QGraphicsOpacityEffect *>(target->graphicsEffect());
-    if (effect == nullptr) {
+    const bool createdEffect = effect == nullptr;
+    if (createdEffect) {
         effect = new QGraphicsOpacityEffect(target);
+        effect->setOpacity(0.0);
         target->setGraphicsEffect(effect);
     }
 
     auto *animation = new QPropertyAnimation(effect, "opacity", target);
+    animation->setObjectName(kFadeAnimationObjectName);
     animation->setDuration(duration);
-    animation->setStartValue(0.0);
+    animation->setStartValue(createdEffect ? 0.0 : effect->opacity());
     animation->setEndValue(1.0);
     animation->setEasingCurve(QEasingCurve::OutCubic);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    QObject::connect(
+        animation,
+        &QPropertyAnimation::finished,
+        animation,
+        &QObject::deleteLater);
+    animation->start();
 }
 
 void QelAnimationHelper::fadeOut(QWidget *target, int duration)
@@ -53,20 +88,25 @@ void QelAnimationHelper::fadeOut(QWidget *target, int duration)
         return;
     }
 
+    stopExistingFadeAnimation(target);
+
     if (!animationEnabled_) {
         target->hide();
         return;
     }
 
     auto *effect = qobject_cast<QGraphicsOpacityEffect *>(target->graphicsEffect());
-    if (effect == nullptr) {
+    const bool createdEffect = effect == nullptr;
+    if (createdEffect) {
         effect = new QGraphicsOpacityEffect(target);
+        effect->setOpacity(1.0);
         target->setGraphicsEffect(effect);
     }
 
     auto *animation = new QPropertyAnimation(effect, "opacity", target);
+    animation->setObjectName(kFadeAnimationObjectName);
     animation->setDuration(duration);
-    animation->setStartValue(1.0);
+    animation->setStartValue(createdEffect ? 1.0 : effect->opacity());
     animation->setEndValue(0.0);
     animation->setEasingCurve(QEasingCurve::OutCubic);
 
@@ -76,8 +116,13 @@ void QelAnimationHelper::fadeOut(QWidget *target, int duration)
             safeTarget->hide();
         }
     });
+    QObject::connect(
+        animation,
+        &QPropertyAnimation::finished,
+        animation,
+        &QObject::deleteLater);
 
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    animation->start();
 }
 
 void QelAnimationHelper::pressFeedback(QWidget *target, int duration)
