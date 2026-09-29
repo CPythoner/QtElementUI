@@ -1,5 +1,8 @@
 #include "QelCheckbox.h"
 
+#include "../QelStyleHelper/QelStyleHelper.h"
+#include "../QelTheme/QelTheme.h"
+
 #include <QPainter>
 #include <QProxyStyle>
 #include <QStyleOption>
@@ -7,6 +10,20 @@
 namespace qel {
 
 namespace {
+
+QelStyleHelper::StateStyleSet indicatorStateStyles()
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    return {
+        {c.fillBlank, c.textRegular, c.borderBase},
+        {c.fillBlank, c.textRegular, c.primary},
+        {c.primaryLight, c.textRegular, c.primary},
+        {c.fillBlank, c.textRegular, c.primary},
+        {c.fillLight, c.textPlaceholder, c.borderLight},
+        {c.fillLight, c.textPlaceholder, c.borderLight}
+    };
+}
 
 class QelCheckboxStyle : public QProxyStyle
 {
@@ -37,25 +54,29 @@ public:
             return;
         }
 
-        const bool enabled = (option->state & State_Enabled);
-        const bool hovered = (option->state & State_MouseOver);
-        const bool checked = (option->state & State_On);
-        const bool indeterminate = (option->state & State_NoChange);
+        const bool enabled = option->state & State_Enabled;
+        const bool hovered = option->state & State_MouseOver;
+        const bool pressed = option->state & State_Sunken;
+        const bool focused = option->state & State_HasFocus;
+        const bool checked = option->state & State_On;
+        const bool indeterminate = option->state & State_NoChange;
 
-        QColor borderColor = QColor("#DCDFE6");
-        QColor bgColor = QColor("#FFFFFF");
+        QelStateContext context;
+        context.enabled = enabled;
+        context.hovered = hovered;
+        context.pressed = pressed;
+        context.focused = focused;
 
-        if (!enabled) {
-            borderColor = QColor("#E4E7ED");
-            bgColor = QColor("#F5F7FA");
-        }
+        const QelVisualState state = QelStyleHelper::resolveState(context);
+        const QelStyleHelper::ComponentStyle visual =
+            QelStyleHelper::styleForState(indicatorStateStyles(), state);
 
-        if (hovered && enabled && !checked && !indeterminate) {
-            borderColor = QColor("#409EFF");
-        }
+        const QelTheme::ColorTokens &c = QelTheme::colors();
+        QColor borderColor(visual.border);
+        QColor bgColor(visual.background);
 
         if (checked || indeterminate) {
-            borderColor = enabled ? QColor("#409EFF") : QColor("#B3D8FF");
+            borderColor = QColor(enabled ? c.primary : c.primaryDisabled);
             bgColor = borderColor;
         }
 
@@ -68,16 +89,24 @@ public:
         painter->drawRoundedRect(rect, 2.5, 2.5);
 
         if (checked || indeterminate) {
-            painter->setPen(QPen(Qt::white, 2.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter->setPen(
+                QPen(QColor(c.fillBlank), 2.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
             if (indeterminate) {
                 const qreal centerY = rect.center().y();
-                painter->drawLine(QPointF(rect.left() + rect.width() * 0.25, centerY),
-                                  QPointF(rect.right() - rect.width() * 0.25, centerY));
+                painter->drawLine(
+                    QPointF(rect.left() + rect.width() * 0.25, centerY),
+                    QPointF(rect.right() - rect.width() * 0.25, centerY));
             } else {
-                const QPointF p1(rect.left() + rect.width() * 0.22, rect.top() + rect.height() * 0.52);
-                const QPointF p2(rect.left() + rect.width() * 0.44, rect.bottom() - rect.height() * 0.24);
-                const QPointF p3(rect.right() - rect.width() * 0.20, rect.top() + rect.height() * 0.26);
+                const QPointF p1(
+                    rect.left() + rect.width() * 0.22,
+                    rect.top() + rect.height() * 0.52);
+                const QPointF p2(
+                    rect.left() + rect.width() * 0.44,
+                    rect.bottom() - rect.height() * 0.24);
+                const QPointF p3(
+                    rect.right() - rect.width() * 0.20,
+                    rect.top() + rect.height() * 0.26);
                 painter->drawLine(p1, p2);
                 painter->drawLine(p2, p3);
             }
@@ -172,11 +201,6 @@ void QelCheckbox::applyStyle()
         horizontalPadding = 18;
         break;
     case Size::Default:
-        indicatorSize = 14;
-        fontSize = 14;
-        spacing = 8;
-        minHeight = 32;
-        horizontalPadding = 14;
         break;
     case Size::Small:
         indicatorSize = 12;
@@ -191,47 +215,59 @@ void QelCheckbox::applyStyle()
     style->setParent(this);
     setStyle(style);
 
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
     QString controlStyle;
     if (border_) {
         controlStyle = QString(
-            " border: 1px solid #DCDFE6;"
+            " border: 1px solid %1;"
             " border-radius: 4px;"
-            " background: #FFFFFF;"
-            " min-height: %1px;"
-            " padding-left: %2px;"
-            " padding-right: %2px;"
-        ).arg(minHeight).arg(horizontalPadding);
+            " background: %2;"
+            " min-height: %3px;"
+            " padding-left: %4px;"
+            " padding-right: %4px;"
+        )
+            .arg(c.borderBase)
+            .arg(c.fillBlank)
+            .arg(minHeight)
+            .arg(horizontalPadding);
     }
 
-    QString styleSheet = QString(
+    const QString styleSheet = QString(
         "QCheckBox {"
-        " color: #606266;"
-        " spacing: %1px;"
-        " font-size: %2px;"
-        "%3"
-        "}"
-        "QCheckBox:hover {"
-        " color: #409EFF;"
+        " color: %1;"
+        " spacing: %2px;"
+        " font-size: %3px;"
         "%4"
         "}"
+        "QCheckBox:hover {"
+        " color: %5;"
+        "%6"
+        "}"
         "QCheckBox:checked {"
-        " color: #409EFF;"
-        "%5"
+        " color: %5;"
+        "%7"
         "}"
         "QCheckBox:disabled {"
-        " color: #C0C4CC;"
-        "%6"
+        " color: %8;"
+        "%9"
         "}"
         "QCheckBox:focus {"
         " outline: none;"
         "}"
     )
+        .arg(c.textRegular)
         .arg(spacing)
         .arg(fontSize)
         .arg(controlStyle)
-        .arg(border_ ? " border-color: #409EFF;" : "")
-        .arg(border_ ? " border-color: #409EFF;" : "")
-        .arg(border_ ? " border-color: #EBEEF5; background: #F5F7FA;" : "");
+        .arg(c.primary)
+        .arg(border_ ? QString(" border-color: %1;").arg(c.primary) : QString())
+        .arg(border_ ? QString(" border-color: %1;").arg(c.primary) : QString())
+        .arg(c.textPlaceholder)
+        .arg(border_
+                 ? QString(" border-color: %1; background: %2;")
+                       .arg(c.borderLighter, c.fillLight)
+                 : QString());
 
     setStyleSheet(styleSheet);
 }

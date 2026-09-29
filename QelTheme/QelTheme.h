@@ -7,6 +7,36 @@ namespace qel {
 
 class QelTheme {
 public:
+    struct ColorTokens {
+        QString primary;
+        QString primaryHover;
+        QString primaryLight;
+        QString primaryDisabled;
+
+        QString success;
+        QString successHover;
+        QString warning;
+        QString warningHover;
+        QString danger;
+        QString dangerHover;
+        QString info;
+        QString infoHover;
+
+        QString textPrimary;
+        QString textRegular;
+        QString textSecondary;
+        QString textPlaceholder;
+
+        QString borderBase;
+        QString borderLight;
+        QString borderLighter;
+
+        QString fillBlank;
+        QString fillLight;
+        QString fillLighter;
+        QString fillPressed;
+    };
+
     struct ButtonStateColors {
         QString background;
         QString text;
@@ -29,6 +59,7 @@ public:
         Text
     };
 
+    static const ColorTokens &colors();
     static ButtonColors buttonColors(ButtonKind kind, bool isPlain);
 
 private:

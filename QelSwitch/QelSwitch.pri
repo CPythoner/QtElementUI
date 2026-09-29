@@ -3,3 +3,5 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/QelSwitch.h
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

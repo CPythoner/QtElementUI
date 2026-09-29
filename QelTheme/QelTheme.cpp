@@ -2,6 +2,41 @@
 
 namespace qel {
 
+const QelTheme::ColorTokens &QelTheme::colors()
+{
+    static const ColorTokens tokens = {
+        "#409EFF",
+        "#66B1FF",
+        "#ECF5FF",
+        "#A0CFFF",
+
+        "#67C23A",
+        "#85CE61",
+        "#E6A23C",
+        "#EBB563",
+        "#F56C6C",
+        "#F78989",
+        "#909399",
+        "#A6A9AD",
+
+        "#303133",
+        "#606266",
+        "#909399",
+        "#C0C4CC",
+
+        "#DCDFE6",
+        "#E4E7ED",
+        "#EBEEF5",
+
+        "#FFFFFF",
+        "#F5F7FA",
+        "#FAFAFA",
+        "#E6E9EF"
+    };
+
+    return tokens;
+}
+
 QelTheme::ButtonColors QelTheme::buttonColors(ButtonKind kind, bool isPlain)
 {
     switch (kind) {
@@ -25,104 +60,111 @@ QelTheme::ButtonColors QelTheme::buttonColors(ButtonKind kind, bool isPlain)
 
 QelTheme::ButtonColors QelTheme::defaultButtonColors(bool)
 {
+    const ColorTokens &c = colors();
     return {
-        {"#FFFFFF", "#606266", "#DCDFE6"},
-        {"#ECF5FF", "#606266", "#DCDFE6"},
-        {"#EBEEF5", "#C0C4CC", "#E4E7ED"}
+        {c.fillBlank, c.textRegular, c.borderBase},
+        {c.primaryLight, c.textRegular, c.borderBase},
+        {c.borderLighter, c.textPlaceholder, c.borderLight}
     };
 }
 
 QelTheme::ButtonColors QelTheme::primaryButtonColors(bool isPlain)
 {
+    const ColorTokens &c = colors();
     if (isPlain) {
         return {
-            {"#ECF5FF", "#409EFF", "#409EFF"},
-            {"#D9ECFF", "#409EFF", "#66B1FF"},
-            {"#F3F8FF", "#A0CFFF", "#D6E4FF"}
+            {c.primaryLight, c.primary, c.primary},
+            {"#D9ECFF", c.primary, c.primaryHover},
+            {"#F3F8FF", c.primaryDisabled, "#D6E4FF"}
         };
     }
 
     return {
-        {"#409EFF", "#FFFFFF", "#409EFF"},
-        {"#66B1FF", "#FFFFFF", "#66B1FF"},
-        {"#B3D8FF", "#FFFFFF", "#B3D8FF"}
+        {c.primary, c.fillBlank, c.primary},
+        {c.primaryHover, c.fillBlank, c.primaryHover},
+        {"#B3D8FF", c.fillBlank, "#B3D8FF"}
     };
 }
 
 QelTheme::ButtonColors QelTheme::successButtonColors(bool isPlain)
 {
+    const ColorTokens &c = colors();
     if (isPlain) {
         return {
-            {"#F0F9EB", "#67C23A", "#67C23A"},
-            {"#E1F3D8", "#67C23A", "#85CE61"},
+            {"#F0F9EB", c.success, c.success},
+            {"#E1F3D8", c.success, c.successHover},
             {"#F4F7EF", "#B2E7A9", "#E1EFE3"}
         };
     }
 
     return {
-        {"#67C23A", "#FFFFFF", "#67C23A"},
-        {"#85CE61", "#FFFFFF", "#85CE61"},
-        {"#B3E19D", "#FFFFFF", "#B3E19D"}
+        {c.success, c.fillBlank, c.success},
+        {c.successHover, c.fillBlank, c.successHover},
+        {"#B3E19D", c.fillBlank, "#B3E19D"}
     };
 }
 
 QelTheme::ButtonColors QelTheme::warningButtonColors(bool isPlain)
 {
+    const ColorTokens &c = colors();
     if (isPlain) {
         return {
-            {"#FDF6EC", "#E6A23C", "#E6A23C"},
-            {"#FAECD8", "#E6A23C", "#EBB563"},
+            {"#FDF6EC", c.warning, c.warning},
+            {"#FAECD8", c.warning, c.warningHover},
             {"#FEF2E5", "#F1D09C", "#FCE7CE"}
         };
     }
 
     return {
-        {"#E6A23C", "#FFFFFF", "#E6A23C"},
-        {"#EBB563", "#FFFFFF", "#EBB563"},
-        {"#F3D19E", "#FFFFFF", "#F3D19E"}
+        {c.warning, c.fillBlank, c.warning},
+        {c.warningHover, c.fillBlank, c.warningHover},
+        {"#F3D19E", c.fillBlank, "#F3D19E"}
     };
 }
 
 QelTheme::ButtonColors QelTheme::dangerButtonColors(bool isPlain)
 {
+    const ColorTokens &c = colors();
     if (isPlain) {
         return {
-            {"#FEF0F0", "#F56C6C", "#F56C6C"},
-            {"#FDE2E2", "#F56C6C", "#F78989"},
+            {"#FEF0F0", c.danger, c.danger},
+            {"#FDE2E2", c.danger, c.dangerHover},
             {"#FEF2F2", "#F9B0B0", "#FDE2E2"}
         };
     }
 
     return {
-        {"#F56C6C", "#FFFFFF", "#F56C6C"},
-        {"#F78989", "#FFFFFF", "#F78989"},
-        {"#FAB6B6", "#FFFFFF", "#FAB6B6"}
+        {c.danger, c.fillBlank, c.danger},
+        {c.dangerHover, c.fillBlank, c.dangerHover},
+        {"#FAB6B6", c.fillBlank, "#FAB6B6"}
     };
 }
 
 QelTheme::ButtonColors QelTheme::infoButtonColors(bool isPlain)
 {
+    const ColorTokens &c = colors();
     if (isPlain) {
         return {
-            {"#F4F4F5", "#909399", "#909399"},
-            {"#EBEBEC", "#909399", "#A6A9AD"},
+            {"#F4F4F5", c.info, c.info},
+            {"#EBEBEC", c.info, c.infoHover},
             {"#F6F6F7", "#C8C9CC", "#ECECEE"}
         };
     }
 
     return {
-        {"#909399", "#FFFFFF", "#909399"},
-        {"#A6A9AD", "#FFFFFF", "#A6A9AD"},
-        {"#C8C9CC", "#FFFFFF", "#C8C9CC"}
+        {c.info, c.fillBlank, c.info},
+        {c.infoHover, c.fillBlank, c.infoHover},
+        {"#C8C9CC", c.fillBlank, "#C8C9CC"}
     };
 }
 
 QelTheme::ButtonColors QelTheme::textButtonColors(bool)
 {
+    const ColorTokens &c = colors();
     return {
-        {"transparent", "#409EFF", "transparent"},
-        {"transparent", "#66B1FF", "transparent"},
-        {"transparent", "#A0CFFF", "transparent"}
+        {"transparent", c.primary, "transparent"},
+        {"transparent", c.primaryHover, "transparent"},
+        {"transparent", c.primaryDisabled, "transparent"}
     };
 }
 

@@ -46,7 +46,6 @@ public:
                        NativeButtonType nativeType = NativeButtonType::Button,
                        const QIcon &icon = QIcon(),
                        const QString &text = QString(),
-                       bool bg = false,
                        QWidget *parent = nullptr);
 
     void setType(ButtonType type);
@@ -60,7 +59,6 @@ public:
     void setAutofocus(bool autofocus);
     void setNativeType(NativeButtonType nativeType);
 
-    // Element Plus inspired additions.
     void setVisualType(VisualType visualType);
     void setTextMode(bool isTextMode);
     void setLinkMode(bool isLinkMode);

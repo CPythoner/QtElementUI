@@ -1,8 +1,29 @@
 #include "QelInput.h"
 
+#include "../QelStyleHelper/QelStyleHelper.h"
+#include "../QelTheme/QelTheme.h"
+
 #include <QHBoxLayout>
 
 namespace qel {
+
+namespace {
+
+QelStyleHelper::StateStyleSet inputStateStyles()
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    return {
+        {c.fillBlank, c.textRegular, c.borderBase},
+        {c.fillBlank, c.textRegular, c.textPlaceholder},
+        {c.fillBlank, c.textRegular, c.primary},
+        {c.fillBlank, c.textRegular, c.primary},
+        {c.fillLight, c.textPlaceholder, c.borderLight},
+        {c.fillLight, c.textPlaceholder, c.borderLight}
+    };
+}
+
+} // namespace
 
 QelInput::QelInput(QWidget *parent,
                    Type type,
@@ -122,24 +143,23 @@ void QelInput::applyStyle()
     }
 
     lineEdit_->setFixedHeight(height);
-    lineEdit_->setStyleSheet(QString(
+
+    QString style = QelStyleHelper::composeStateStyleSheet(
+        "QLineEdit",
+        QString(),
+        inputStateStyles(),
+        true);
+
+    style += QString(
         "QLineEdit {"
-        " border: 1px solid #DCDFE6;"
         " border-radius: 4px;"
-        " color: #606266;"
         " padding-left: %1px;"
         " padding-right: %1px;"
         " font-size: %2px;"
         "}"
-        "QLineEdit:focus {"
-        " border: 1px solid #409EFF;"
-        "}"
-        "QLineEdit:disabled {"
-        " color: #C0C4CC;"
-        " background: #F5F7FA;"
-        " border: 1px solid #E4E7ED;"
-        "}"
-    ).arg(horizontalPadding).arg(fontSize));
+    ).arg(horizontalPadding).arg(fontSize);
+
+    lineEdit_->setStyleSheet(style);
 }
 
 void QelInput::updatePasswordAction()
@@ -151,8 +171,14 @@ void QelInput::updatePasswordAction()
     }
 
     if (type_ == Type::Password && showPassword_) {
-        passwordAction_ = lineEdit_->addAction(passwordVisible_ ? "Hide" : "Show", QLineEdit::TrailingPosition);
-        connect(passwordAction_, &QAction::triggered, this, &QelInput::onTogglePasswordVisibility);
+        passwordAction_ = lineEdit_->addAction(
+            passwordVisible_ ? "Hide" : "Show",
+            QLineEdit::TrailingPosition);
+        connect(
+            passwordAction_,
+            &QAction::triggered,
+            this,
+            &QelInput::onTogglePasswordVisibility);
     }
 }
 

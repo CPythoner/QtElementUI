@@ -31,20 +31,22 @@ QelTheme::ButtonKind toButtonKind(QelButton::ButtonType type)
 
 QColor semanticColor(QelButton::ButtonType type)
 {
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
     switch (type) {
     case QelButton::ButtonType::Primary:
-        return QColor("#409EFF");
+        return QColor(c.primary);
     case QelButton::ButtonType::Success:
-        return QColor("#67C23A");
+        return QColor(c.success);
     case QelButton::ButtonType::Warning:
-        return QColor("#E6A23C");
+        return QColor(c.warning);
     case QelButton::ButtonType::Danger:
-        return QColor("#F56C6C");
+        return QColor(c.danger);
     case QelButton::ButtonType::Info:
-        return QColor("#909399");
+        return QColor(c.info);
     case QelButton::ButtonType::Default:
     default:
-        return QColor("#606266");
+        return QColor(c.textRegular);
     }
 }
 
@@ -60,23 +62,25 @@ QColor parseColorOrDefault(const QString &input, const QColor &fallback)
 
 void applyCustomColor(QelStyleHelper::StateStyleSet &styles, const QString &color)
 {
-    const QColor base = parseColorOrDefault(color, QColor("#409EFF"));
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+    const QColor base = parseColorOrDefault(color, QColor(c.primary));
     const QColor hover = base.lighter(110);
     const QColor disabled = base.lighter(138);
 
     styles.normal.background = base.name();
     styles.normal.border = base.name();
-    styles.normal.text = "#FFFFFF";
+    styles.normal.text = c.fillBlank;
 
     styles.hover.background = hover.name();
     styles.hover.border = hover.name();
-    styles.hover.text = "#FFFFFF";
+    styles.hover.text = c.fillBlank;
 
     styles.active = styles.hover;
+    styles.focus = styles.hover;
 
     styles.disabled.background = disabled.name();
     styles.disabled.border = disabled.name();
-    styles.disabled.text = "#FFFFFF";
+    styles.disabled.text = c.fillBlank;
 
     styles.loading = styles.disabled;
 }
@@ -86,30 +90,24 @@ void applyTextLikeStyle(QelStyleHelper::StateStyleSet &styles,
                         bool isLink,
                         bool hasBackground)
 {
+    const QelTheme::ColorTokens &c = QelTheme::colors();
     const QColor semantic = semanticColor(type);
     const QString normalText = semantic.name();
     const QString hoverText = semantic.lighter(115).name();
     const QString disabledText = semantic.lighter(150).name();
 
-    const QString basicHoverBg = "#ecf5ff";
-    const QString alwaysOnBg = "#f4f4f5";
-    const QString alwaysOnHoverBg = "#e4e7ed";
-
-    styles.normal.background = hasBackground ? alwaysOnBg : "transparent";
+    styles.normal.background = hasBackground ? c.fillLight : "transparent";
     styles.normal.border = "transparent";
     styles.normal.text = normalText;
 
-    styles.hover.background = hasBackground ? alwaysOnHoverBg : basicHoverBg;
+    styles.hover.background = hasBackground ? c.borderLight : c.primaryLight;
     styles.hover.border = "transparent";
     styles.hover.text = hoverText;
 
     styles.active = styles.hover;
+    styles.focus = styles.hover;
 
-    styles.focus.background = styles.hover.background;
-    styles.focus.border = "transparent";
-    styles.focus.text = styles.hover.text;
-
-    styles.disabled.background = hasBackground ? alwaysOnBg : "transparent";
+    styles.disabled.background = hasBackground ? c.fillLight : "transparent";
     styles.disabled.border = "transparent";
     styles.disabled.text = disabledText;
 
@@ -132,7 +130,6 @@ QelButton::QelButton(ButtonType type,
                      NativeButtonType nativeType,
                      const QIcon &icon,
                      const QString &text,
-                     bool bg,
                      QWidget *parent)
     : QPushButton(text, parent)
     , type_(type)
@@ -142,7 +139,6 @@ QelButton::QelButton(ButtonType type,
     , isCircle_(isCircle)
     , isLoading_(isLoading)
     , nativeType_(nativeType)
-    , hasBackground_(bg)
 {
     setIcon(icon);
     setProperty("qel-loading", isLoading_);
@@ -244,24 +240,31 @@ void QelButton::setDark(bool dark)
     updateButtonStyle();
 }
 
-void QelButton::updateButtonStyle() {
+void QelButton::updateButtonStyle()
+{
     QString style;
 
     const QelTheme::ButtonKind kind = toButtonKind(type_);
-    QelStyleHelper::StateStyleSet styles = QelStyleHelper::buttonStateStyles(kind, isPlain_);
+    QelStyleHelper::StateStyleSet styles =
+        QelStyleHelper::buttonStateStyles(kind, isPlain_);
 
     if (!customColor_.isEmpty()) {
         applyCustomColor(styles, customColor_);
     }
 
     if (visualType_ == VisualType::Text || visualType_ == VisualType::Link) {
-        applyTextLikeStyle(styles, type_, visualType_ == VisualType::Link, hasBackground_);
+        applyTextLikeStyle(
+            styles,
+            type_,
+            visualType_ == VisualType::Link,
+            hasBackground_);
     }
 
-    style += QelStyleHelper::composeStateStyleSheet("QPushButton",
-                                                    "QPushButton[qel-loading=\"true\"]",
-                                                    styles,
-                                                    true);
+    style += QelStyleHelper::composeStateStyleSheet(
+        "QPushButton",
+        "QPushButton[qel-loading=\"true\"]",
+        styles,
+        true);
 
     QString sizeStyle;
     switch (size_) {
@@ -278,7 +281,7 @@ void QelButton::updateButtonStyle() {
 
     QString roundStyle;
     if (isRound_) {
-        roundStyle = QString("border-radius: %1px;").arg(this->height() / 2);
+        roundStyle = QString("border-radius: %1px;").arg(height() / 2);
     } else {
         roundStyle = "border-radius: 4px;";
     }
@@ -288,8 +291,8 @@ void QelButton::updateButtonStyle() {
     }
 
     if (isCircle_) {
-        roundStyle = QString("border-radius: %1px;").arg(this->height() / 2);
-        setFixedWidth(this->height());
+        roundStyle = QString("border-radius: %1px;").arg(height() / 2);
+        setFixedWidth(height());
     }
 
     style += QString("QPushButton { %1 %2 }").arg(sizeStyle, roundStyle);
@@ -298,7 +301,7 @@ void QelButton::updateButtonStyle() {
         style += "QPushButton:hover { text-decoration: underline; }";
     }
 
-    this->setStyleSheet(style);
+    setStyleSheet(style);
 }
 
-}   // namespace qel
+} // namespace qel

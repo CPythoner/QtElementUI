@@ -3,3 +3,5 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/QelInput.h
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)
