@@ -22,6 +22,15 @@
 
 QelElementUI 是一个基于 Qt Widgets 的现代化控件库，组件功能、交互语义与视觉规范优先对齐 Element Plus，并使用 Qt-native API 实现对应能力。
 
+## API 对齐基线
+
+QtElementUI 统一以 **Element Plus 当前稳定版本** 作为组件功能、默认值、交互和视觉的参考基线。
+
+- 当前对齐基线：**Element Plus 2.14.6**。
+- 每个组件开发/重构时，都应先核对当时最新稳定版的官方 API 与源码，并在 PR 中记录参考版本。
+- Web 专属实现不会机械复制到 C++：例如 Popper.js、teleport、virtual DOM 等能力会映射到 `QelPopupManager`、Qt popup/window、QWidget 等 Qt-native 抽象。
+- Element UI 2.x 不再作为新组件 API 设计基线；仅在兼容历史行为时作为补充参考。
+
 ## 安装
 
 ### 下载源码

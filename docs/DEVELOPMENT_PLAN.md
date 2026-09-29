@@ -19,10 +19,48 @@
 ## 2. 总体目标与验收口径
 
 ### 2.1 总体目标
-在 Qt Widgets 体系中，分阶段实现与 ElementUI/Element Plus 对齐的组件库，保证：
-- API 风格统一、易于迁移；
-- 视觉与交互行为尽量贴近 Element；
+在 Qt Widgets 体系中，分阶段实现以 **Element Plus 当前稳定版** 为唯一产品/API 基线的组件库，保证：
+- API 风格统一、易于从 Element Plus 心智迁移；
+- 视觉、默认值与交互行为优先贴近 Element Plus；
 - 具备工程可维护性（测试、文档、示例、版本化发布）。
+
+### 2.2 Element Plus 对齐基线
+
+从 2026-09 起，QtElementUI 的所有新组件和现有组件重构统一遵循以下规则：
+
+1. **唯一参考基线：Element Plus 当前稳定版**
+   - 组件立项时先核对 Element Plus 官方文档与源码。
+   - PR 中记录本次对齐的 Element Plus 版本，保证后续可追溯。
+   - 当前仓库基线版本：**Element Plus 2.14.6**。
+
+2. **优先对齐组件语义，而不是机械复制 Web API**
+   - props/defaults → Qt setter/getter、构造参数或枚举。
+   - events/emits → Qt signals。
+   - slots → QWidget、自定义 delegate、renderer 或回调。
+   - v-model / controlled state → Qt 属性 + setter/getter + signals。
+   - keyboard / focus / accessibility 行为在 Qt 能表达时必须保留。
+
+3. **Web 专属实现必须做 Qt-native 映射**
+   - Popper.js 定位能力 → `QelPopupManager`。
+   - CSS/design variables → `QelTheme` + `QelStyleHelper`。
+   - transition → `QelAnimationHelper`。
+   - teleport/append-to → Qt popup/top-level widget parenting 策略。
+   - virtual-ref → QWidget/geometry-based target abstraction。
+   - 不为了“API 名字齐全”暴露没有实际 Qt 语义的空接口。
+
+4. **现有组件也按同一标准逐步审计**
+   - Button / Input / Select / Checkbox / Radio / Switch / Form / NumberInput
+     后续修改时必须先与当前 Element Plus API 做差异检查。
+   - 新组件从第一版开始直接使用 Element Plus 当前 API，不再参考 Element UI 2.x 设计。
+
+5. **每个组件 PR 的最低对齐检查**
+   - API/默认值；
+   - 状态与事件；
+   - keyboard/focus；
+   - disabled/loading 等公共状态；
+   - Theme token；
+   - QelShow 示例；
+   - Qt-native 映射说明。
 
 ### 2.2 验收口径（每个组件都应满足）
 - **功能**：核心 props/状态/事件齐全（至少覆盖常见 80% 场景）。
@@ -188,7 +226,7 @@ QelVisualState QelStyleHelper::resolveState(const QelStateContext &ctx) {
 5. `QelTag` / `QelBadge` / `QelProgress`
 
 ### 关键策略
-- 统一 API 命名：贴近 Element（如 `size`、`disabled`、`clearable`、`placeholder`）。
+- 统一 API 命名与行为：以当前 Element Plus 为准（如 `size`、`disabled`、`clearable`、`placeholder` 等），并转换成 Qt-native API。
 - 每个组件上线时同时补齐：
   - `*.h/*.cpp/*.pri`
   - `Tester` 展示页
@@ -220,7 +258,7 @@ QelVisualState QelStyleHelper::resolveState(const QelStateContext &ctx) {
 ---
 
 ## Phase 3（8~12 周）：复杂组件与发布体系
-目标：冲刺“ElementUI 级别组件库”可发布版本。
+目标：冲刺可覆盖主流 Element Plus 中后台场景的可发布组件库版本。
 
 ### 组件优先级（建议）
 1. 复杂输入：`QelDatePicker`、`QelTimePicker`、`QelCascader`、`QelTreeSelect`
