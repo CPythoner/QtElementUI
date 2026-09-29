@@ -17,6 +17,7 @@
     - [QelSwitch 示例](#qelswitch-示例)
     - [QelTooltip 示例](#qeltooltip-示例)
     - [QelTag 示例](#qeltag-示例)
+    - [QelBadge 示例](#qelbadge-示例)
   - [自定义](#自定义)
 
 # QelElementUI 项目
@@ -60,7 +61,7 @@ include($$PWD/../QelButton/QelButton.pri)
 
 ### QelShow 功能
 
-- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip`、`QelTag` 等。
+- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip`、`QelTag`、`QelBadge` 等。
 
 - 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
@@ -232,3 +233,43 @@ connect(tag, &qel::QelTag::closeRequested, this, [tag]() {
 `type`, `closable`, `disable-transitions`, `hit`, `color`, `size`,
 `effect` and `round`. The close control emits `closeRequested()` and
 does not automatically remove the tag; removal remains the caller's decision.
+
+
+### QelBadge 示例
+
+```cpp
+#include "QelBadge.h"
+#include "QelButton.h"
+
+qel::QelBadge *badge = new qel::QelBadge(this);
+
+qel::QelButton *button = new qel::QelButton(
+    qel::QelButton::Default,
+    qel::QelButton::DefaultSize,
+    false,
+    false,
+    false,
+    false,
+    qel::QelButton::Button,
+    QIcon(),
+    "Messages");
+
+badge->setContentWidget(button);
+badge->setValue(120);
+badge->setMax(99);
+badge->setType(qel::QelBadge::Danger);
+```
+
+`QelBadge` aligns with Element Plus 2.14.6 Badge semantics:
+`value`, `max`, `is-dot`, `hidden`, `type`, `show-zero`,
+`color`, `badge-style`, `offset`, and `badge-class`.
+
+The Element Plus default slot maps to `setContentWidget()`. The `content`
+slot supports both `setBadgeContentWidget()` for static QWidget content and
+`setBadgeContentRenderer()` for scoped content that receives the current
+computed value (for example `99+`). Badge positioning is implemented with
+Qt-native child geometry while preserving the Element Plus top-right anchor
+and offset semantics.
+
+`QelShow` mirrors the official Element Plus Badge examples: Basic, Max value,
+Custom content, Dot and Offset.
