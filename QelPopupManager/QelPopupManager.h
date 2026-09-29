@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QPoint>
+#include <QPointer>
 #include <QSize>
 
 class QWidget;
@@ -10,10 +11,18 @@ class QWidget;
 namespace qel {
 
 enum class PopupPlacement {
-    Bottom,
+    TopStart,
     Top,
+    TopEnd,
+    BottomStart,
+    Bottom,
+    BottomEnd,
+    LeftStart,
     Left,
-    Right
+    LeftEnd,
+    RightStart,
+    Right,
+    RightEnd
 };
 
 enum class PopupType {
@@ -37,7 +46,20 @@ struct PopupPolicy {
 
 class QelPopupManager {
 public:
-    static QPoint computePopupPosition(QWidget *anchor, QSize popupSize, PopupPlacement placement);
+    static QPoint computePopupPosition(QWidget *anchor,
+                                       QSize popupSize,
+                                       PopupPlacement placement,
+                                       int offset = 0,
+                                       PopupPlacement *resolvedPlacement = nullptr);
+
+    static QPoint computePopupPosition(QWidget *anchor,
+                                       QSize popupSize,
+                                       PopupPlacement placement,
+                                       int offset,
+                                       const QList<PopupPlacement> &fallbackPlacements,
+                                       int boundariesPadding,
+                                       PopupPlacement *resolvedPlacement = nullptr);
+
     static int acquireZIndex(PopupType type);
     static void registerPopup(QWidget *popup, PopupPolicy policy = PopupPolicy());
     static void closeAll(PopupType type);
@@ -45,7 +67,7 @@ public:
 
 private:
     struct PopupRecord {
-        QWidget *popup = nullptr;
+        QPointer<QWidget> popup;
         PopupPolicy policy;
     };
 

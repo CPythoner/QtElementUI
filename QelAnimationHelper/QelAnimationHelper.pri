@@ -1,5 +1,9 @@
-SOURCES += \
-    $$PWD/QelAnimationHelper.cpp
+isEmpty(QEL_ANIMATION_HELPER_PRI_INCLUDED) {
+    QEL_ANIMATION_HELPER_PRI_INCLUDED = 1
 
-HEADERS += \
-    $$PWD/QelAnimationHelper.h
+    SOURCES += \
+        $$PWD/QelAnimationHelper.cpp
+
+    HEADERS += \
+        $$PWD/QelAnimationHelper.h
+}

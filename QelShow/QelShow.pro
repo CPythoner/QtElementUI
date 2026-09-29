@@ -50,3 +50,5 @@ include($$PWD/../QelCheckbox/QelCheckbox.pri)
 include($$PWD/../QelRadio/QelRadio.pri)
 include($$PWD/../QelSwitch/QelSwitch.pri)
 include($$PWD/../QelForm/QelForm.pri)
+
+include($$PWD/../QelTooltip/QelTooltip.pri)

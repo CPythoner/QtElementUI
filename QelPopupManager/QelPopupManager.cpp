@@ -6,58 +6,225 @@
 
 namespace qel {
 
+namespace {
+
+bool isTop(PopupPlacement placement)
+{
+    return placement == PopupPlacement::TopStart
+        || placement == PopupPlacement::Top
+        || placement == PopupPlacement::TopEnd;
+}
+
+bool isBottom(PopupPlacement placement)
+{
+    return placement == PopupPlacement::BottomStart
+        || placement == PopupPlacement::Bottom
+        || placement == PopupPlacement::BottomEnd;
+}
+
+bool isLeft(PopupPlacement placement)
+{
+    return placement == PopupPlacement::LeftStart
+        || placement == PopupPlacement::Left
+        || placement == PopupPlacement::LeftEnd;
+}
+
+PopupPlacement oppositePlacement(PopupPlacement placement)
+{
+    switch (placement) {
+    case PopupPlacement::TopStart:
+        return PopupPlacement::BottomStart;
+    case PopupPlacement::Top:
+        return PopupPlacement::Bottom;
+    case PopupPlacement::TopEnd:
+        return PopupPlacement::BottomEnd;
+    case PopupPlacement::BottomStart:
+        return PopupPlacement::TopStart;
+    case PopupPlacement::Bottom:
+        return PopupPlacement::Top;
+    case PopupPlacement::BottomEnd:
+        return PopupPlacement::TopEnd;
+    case PopupPlacement::LeftStart:
+        return PopupPlacement::RightStart;
+    case PopupPlacement::Left:
+        return PopupPlacement::Right;
+    case PopupPlacement::LeftEnd:
+        return PopupPlacement::RightEnd;
+    case PopupPlacement::RightStart:
+        return PopupPlacement::LeftStart;
+    case PopupPlacement::Right:
+        return PopupPlacement::Left;
+    case PopupPlacement::RightEnd:
+        return PopupPlacement::LeftEnd;
+    }
+
+    return PopupPlacement::Bottom;
+}
+
+QPoint candidatePosition(const QRect &anchorRect,
+                         const QSize &popupSize,
+                         PopupPlacement placement,
+                         int offset)
+{
+    const int centeredX = anchorRect.center().x() - popupSize.width() / 2;
+    const int centeredY = anchorRect.center().y() - popupSize.height() / 2;
+
+    switch (placement) {
+    case PopupPlacement::TopStart:
+        return QPoint(anchorRect.left(), anchorRect.top() - popupSize.height() - offset);
+    case PopupPlacement::Top:
+        return QPoint(centeredX, anchorRect.top() - popupSize.height() - offset);
+    case PopupPlacement::TopEnd:
+        return QPoint(anchorRect.right() - popupSize.width() + 1,
+                      anchorRect.top() - popupSize.height() - offset);
+    case PopupPlacement::BottomStart:
+        return QPoint(anchorRect.left(), anchorRect.bottom() + 1 + offset);
+    case PopupPlacement::Bottom:
+        return QPoint(centeredX, anchorRect.bottom() + 1 + offset);
+    case PopupPlacement::BottomEnd:
+        return QPoint(anchorRect.right() - popupSize.width() + 1,
+                      anchorRect.bottom() + 1 + offset);
+    case PopupPlacement::LeftStart:
+        return QPoint(anchorRect.left() - popupSize.width() - offset, anchorRect.top());
+    case PopupPlacement::Left:
+        return QPoint(anchorRect.left() - popupSize.width() - offset, centeredY);
+    case PopupPlacement::LeftEnd:
+        return QPoint(anchorRect.left() - popupSize.width() - offset,
+                      anchorRect.bottom() - popupSize.height() + 1);
+    case PopupPlacement::RightStart:
+        return QPoint(anchorRect.right() + 1 + offset, anchorRect.top());
+    case PopupPlacement::Right:
+        return QPoint(anchorRect.right() + 1 + offset, centeredY);
+    case PopupPlacement::RightEnd:
+        return QPoint(anchorRect.right() + 1 + offset,
+                      anchorRect.bottom() - popupSize.height() + 1);
+    }
+
+    return QPoint(anchorRect.left(), anchorRect.bottom() + 1 + offset);
+}
+
+bool overflowsMainAxis(const QPoint &position,
+                       const QSize &popupSize,
+                       PopupPlacement placement,
+                       const QRect &available)
+{
+    if (isTop(placement)) {
+        return position.y() < available.top();
+    }
+    if (isBottom(placement)) {
+        return position.y() + popupSize.height() - 1 > available.bottom();
+    }
+    if (isLeft(placement)) {
+        return position.x() < available.left();
+    }
+
+    return position.x() + popupSize.width() - 1 > available.right();
+}
+
+QRect paddedAvailableGeometry(QScreen *screen, int padding)
+{
+    QRect available = screen->availableGeometry();
+    const int safePadding = qMax(0, padding);
+    const QRect padded =
+        available.adjusted(safePadding, safePadding, -safePadding, -safePadding);
+
+    return padded.isValid() ? padded : available;
+}
+
+} // namespace
+
 QList<QelPopupManager::PopupRecord> QelPopupManager::popups_;
 int QelPopupManager::zIndexSeed_ = 2000;
 
-QPoint QelPopupManager::computePopupPosition(QWidget *anchor, QSize popupSize, PopupPlacement placement)
+QPoint QelPopupManager::computePopupPosition(QWidget *anchor,
+                                             QSize popupSize,
+                                             PopupPlacement placement,
+                                             int offset,
+                                             PopupPlacement *resolvedPlacement)
 {
+    return computePopupPosition(
+        anchor,
+        popupSize,
+        placement,
+        offset,
+        QList<PopupPlacement>(),
+        0,
+        resolvedPlacement);
+}
+
+QPoint QelPopupManager::computePopupPosition(
+    QWidget *anchor,
+    QSize popupSize,
+    PopupPlacement placement,
+    int offset,
+    const QList<PopupPlacement> &fallbackPlacements,
+    int boundariesPadding,
+    PopupPlacement *resolvedPlacement)
+{
+    if (resolvedPlacement != nullptr) {
+        *resolvedPlacement = placement;
+    }
+
     if (anchor == nullptr) {
         return QPoint(0, 0);
     }
 
-    const QRect anchorRect = anchor->rect();
-    const QPoint anchorTopLeft = anchor->mapToGlobal(anchorRect.topLeft());
-
-    QPoint result = anchorTopLeft;
-    switch (placement) {
-    case PopupPlacement::Top:
-        result = QPoint(anchorTopLeft.x(), anchorTopLeft.y() - popupSize.height());
-        break;
-    case PopupPlacement::Left:
-        result = QPoint(anchorTopLeft.x() - popupSize.width(), anchorTopLeft.y());
-        break;
-    case PopupPlacement::Right:
-        result = QPoint(anchorTopLeft.x() + anchorRect.width(), anchorTopLeft.y());
-        break;
-    case PopupPlacement::Bottom:
-    default:
-        result = QPoint(anchorTopLeft.x(), anchorTopLeft.y() + anchorRect.height());
-        break;
-    }
+    const QPoint globalTopLeft = anchor->mapToGlobal(QPoint(0, 0));
+    const QRect anchorRect(globalTopLeft, anchor->size());
 
     QScreen *screen = anchor->screen();
     if (screen == nullptr) {
         screen = QApplication::primaryScreen();
     }
 
-    if (screen != nullptr) {
-        const QRect avail = screen->availableGeometry();
+    QPoint result = candidatePosition(anchorRect, popupSize, placement, offset);
 
-        if (result.x() + popupSize.width() > avail.right()) {
-            result.setX(avail.right() - popupSize.width());
-        }
-        if (result.x() < avail.left()) {
-            result.setX(avail.left());
-        }
+    if (screen == nullptr) {
+        return result;
+    }
 
-        if (result.y() + popupSize.height() > avail.bottom()) {
-            const int topY = anchorTopLeft.y() - popupSize.height();
-            result.setY(topY >= avail.top() ? topY : (avail.bottom() - popupSize.height()));
-        }
-        if (result.y() < avail.top()) {
-            result.setY(avail.top());
+    const QRect available =
+        paddedAvailableGeometry(screen, boundariesPadding);
+
+    QList<PopupPlacement> candidates;
+    candidates.append(placement);
+
+    if (fallbackPlacements.isEmpty()) {
+        candidates.append(oppositePlacement(placement));
+    } else {
+        for (PopupPlacement fallback : fallbackPlacements) {
+            if (!candidates.contains(fallback)) {
+                candidates.append(fallback);
+            }
         }
     }
+
+    for (PopupPlacement candidate : candidates) {
+        const QPoint candidatePoint =
+            candidatePosition(anchorRect, popupSize, candidate, offset);
+
+        if (!overflowsMainAxis(
+                candidatePoint,
+                popupSize,
+                candidate,
+                available)) {
+            result = candidatePoint;
+            if (resolvedPlacement != nullptr) {
+                *resolvedPlacement = candidate;
+            }
+            break;
+        }
+    }
+
+    const int maxX = qMax(
+        available.left(),
+        available.right() - popupSize.width() + 1);
+    const int maxY = qMax(
+        available.top(),
+        available.bottom() - popupSize.height() + 1);
+
+    result.setX(qBound(available.left(), result.x(), maxX));
+    result.setY(qBound(available.top(), result.y(), maxY));
 
     return result;
 }
@@ -123,23 +290,23 @@ void QelPopupManager::handleScreenBoundary(QWidget *popup)
         return;
     }
 
-    const QRect avail = screen->availableGeometry();
-    QRect g = popup->geometry();
+    const QRect available = screen->availableGeometry();
+    QRect geometry = popup->geometry();
 
-    if (g.right() > avail.right()) {
-        g.moveRight(avail.right());
+    if (geometry.right() > available.right()) {
+        geometry.moveRight(available.right());
     }
-    if (g.left() < avail.left()) {
-        g.moveLeft(avail.left());
+    if (geometry.left() < available.left()) {
+        geometry.moveLeft(available.left());
     }
-    if (g.bottom() > avail.bottom()) {
-        g.moveBottom(avail.bottom());
+    if (geometry.bottom() > available.bottom()) {
+        geometry.moveBottom(available.bottom());
     }
-    if (g.top() < avail.top()) {
-        g.moveTop(avail.top());
+    if (geometry.top() < available.top()) {
+        geometry.moveTop(available.top());
     }
 
-    popup->setGeometry(g);
+    popup->setGeometry(geometry);
 }
 
 } // namespace qel

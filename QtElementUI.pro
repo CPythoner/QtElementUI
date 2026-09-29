@@ -10,5 +10,6 @@ SUBDIRS += \
     QelRadio \
     QelSwitch \
     QelForm \
+    QelTooltip \
     QelShow
 
