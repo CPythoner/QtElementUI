@@ -15,3 +15,5 @@ HEADERS += \
 
 DISTFILES += \
     QelSwitch.pri
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

@@ -52,9 +52,9 @@ private:
     bool readonly;
     bool disabled;
     bool controls;
+    ControlsPosition controlsPosition;  // 使用枚举类型
     Size size;
     int precision;
-    ControlsPosition controlsPosition;  // 使用枚举类型
 
     QPushButton *decreaseButton;
     QPushButton *increaseButton;

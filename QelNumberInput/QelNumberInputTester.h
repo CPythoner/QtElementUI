@@ -40,6 +40,8 @@ public:
 private:
     QWidget* createNumberInput(const QString &labelText, int minValue, int maxValue, double initialValue, double step,
                                bool stepStrictly = false, bool disabled = false, bool controls = true, int precision = 0) {
+        Q_UNUSED(stepStrictly)
+        Q_UNUSED(controls)
         QWidget *widget = new QWidget(this);
         QVBoxLayout *layout = new QVBoxLayout(widget);
 

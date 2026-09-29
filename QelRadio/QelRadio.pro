@@ -15,3 +15,5 @@ HEADERS += \
 
 DISTFILES += \
     QelRadio.pri
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)
