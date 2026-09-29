@@ -42,7 +42,11 @@ public:
     };
 
     static QelVisualState resolveState(const QelStateContext &ctx);
-    static ComponentStyle buttonStyle(QelTheme::ButtonKind kind, bool isPlain, QelVisualState state);
+    static ComponentStyle styleForState(const StateStyleSet &styles, QelVisualState state);
+
+    static ComponentStyle buttonStyle(QelTheme::ButtonKind kind,
+                                      bool isPlain,
+                                      QelVisualState state);
     static StateStyleSet buttonStateStyles(QelTheme::ButtonKind kind, bool isPlain);
 
     static QString composeStateStyleSheet(const QString &baseSelector,

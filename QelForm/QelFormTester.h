@@ -109,7 +109,6 @@ public:
             QelButton::Button,
             QIcon(),
             "Validate",
-            false,
             this);
 
         QelButton *resetButton = new QelButton(
@@ -122,7 +121,6 @@ public:
             QelButton::Button,
             QIcon(),
             "Reset",
-            false,
             this);
 
         resultLabel_ = new QLabel(this);

@@ -1,11 +1,46 @@
 #include "QelSelect.h"
+
 #include "../QelIcon/QelIcon.h"
+#include "../QelStyleHelper/QelStyleHelper.h"
+#include "../QelTheme/QelTheme.h"
 
 #include <QAbstractItemView>
 #include <QHBoxLayout>
 #include <QLineEdit>
 
 namespace qel {
+
+namespace {
+
+QelStyleHelper::StateStyleSet selectStateStyles()
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    return {
+        {c.fillBlank, c.textRegular, c.borderBase},
+        {c.fillBlank, c.textRegular, c.textPlaceholder},
+        {c.fillBlank, c.textRegular, c.primary},
+        {c.fillBlank, c.textRegular, c.primary},
+        {c.fillLight, c.textPlaceholder, c.borderLight},
+        {c.fillLight, c.textPlaceholder, c.borderLight}
+    };
+}
+
+QelStyleHelper::StateStyleSet dropDownButtonStateStyles()
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    return {
+        {c.fillLight, c.textSecondary, c.borderBase},
+        {c.primaryLight, c.primary, c.primary},
+        {c.primaryLight, c.primary, c.primary},
+        {c.primaryLight, c.primary, c.primary},
+        {c.fillLight, c.textPlaceholder, c.borderLight},
+        {c.fillLight, c.textPlaceholder, c.borderLight}
+    };
+}
+
+} // namespace
 
 QelSelect::QelSelect(QWidget *parent)
     : QWidget(parent),
@@ -127,6 +162,8 @@ void QelSelect::applyStyle()
         break;
     }
 
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
     QFont font = comboBox_->font();
     font.setPointSize(fontSize);
     comboBox_->setFont(font);
@@ -140,16 +177,18 @@ void QelSelect::applyStyle()
     }
 
     comboBox_->setFixedHeight(height);
-    comboBox_->setStyleSheet(QString(
+
+    QString comboStyle = QelStyleHelper::composeStateStyleSheet(
+        "QComboBox",
+        QString(),
+        selectStateStyles(),
+        true);
+
+    comboStyle += QString(
         "QComboBox {"
-        " border: 1px solid #DCDFE6;"
         " border-radius: 4px;"
-        " color: #606266;"
         " padding-left: %1px;"
-        " padding-right: %3px;"
-        "}"
-        "QComboBox:focus {"
-        " border: 1px solid #409EFF;"
+        " padding-right: %2px;"
         "}"
         "QComboBox::drop-down {"
         " width: 0px;"
@@ -158,41 +197,41 @@ void QelSelect::applyStyle()
         "QComboBox::down-arrow {"
         " image: none;"
         "}"
-        "QComboBox:disabled {"
-        " color: #C0C4CC;"
-        " background: #F5F7FA;"
-        " border: 1px solid #E4E7ED;"
-        "}"
         "QComboBox QAbstractItemView {"
-        " border: 1px solid #E4E7ED;"
-        " background-color: #FFFFFF;"
-        " color: #606266;"
-        " selection-background-color: #ECF5FF;"
-        " selection-color: #409EFF;"
+        " border: 1px solid %3;"
+        " background-color: %4;"
+        " color: %5;"
+        " selection-background-color: %6;"
+        " selection-color: %7;"
         " outline: 0;"
         "}"
-    ).arg(horizontalPadding).arg(dropDownWidth));
+    )
+        .arg(horizontalPadding)
+        .arg(dropDownWidth)
+        .arg(c.borderLight)
+        .arg(c.fillBlank)
+        .arg(c.textRegular)
+        .arg(c.primaryLight)
+        .arg(c.primary);
+
+    comboBox_->setStyleSheet(comboStyle);
 
     dropDownButton_->setFixedSize(dropDownWidth, height);
-    dropDownButton_->setStyleSheet(
+
+    QString buttonStyle = QelStyleHelper::composeStateStyleSheet(
+        "QToolButton",
+        QString(),
+        dropDownButtonStateStyles(),
+        true);
+
+    buttonStyle +=
         "QToolButton {"
-        " border: 1px solid #DCDFE6;"
         " border-left: 0px;"
         " border-top-right-radius: 4px;"
         " border-bottom-right-radius: 4px;"
-        " background-color: #F5F7FA;"
-        "}"
-        "QToolButton:hover {"
-        " border-color: #409EFF;"
-        " color: #409EFF;"
-        " background-color: #ECF5FF;"
-        "}"
-        "QToolButton:disabled {"
-        " border-color: #E4E7ED;"
-        " color: #C0C4CC;"
-        " background-color: #F5F7FA;"
-        "}"
-    );
+        "}";
+
+    dropDownButton_->setStyleSheet(buttonStyle);
 
     updateDropDownButtonIcon(height);
 
@@ -216,8 +255,12 @@ void QelSelect::resizeEvent(QResizeEvent *event)
 
 void QelSelect::updateDropDownButtonIcon(int buttonHeight)
 {
+    const QelTheme::ColorTokens &c = QelTheme::colors();
     const int iconSize = qMax(8, buttonHeight / 3);
-    const QColor iconColor = isEnabled() ? QColor("#909399") : QColor("#C0C4CC");
+    const QColor iconColor = dropDownButton_->isEnabled()
+        ? QColor(c.textSecondary)
+        : QColor(c.textPlaceholder);
+
     dropDownButton_->setIcon(QelIcon(QelIcon::ChevronDown, iconSize, iconColor));
     dropDownButton_->setIconSize(QSize(iconSize, iconSize));
 }

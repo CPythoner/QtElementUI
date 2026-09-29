@@ -27,9 +27,31 @@ QelVisualState QelStyleHelper::resolveState(const QelStateContext &ctx)
     return QelVisualState::Normal;
 }
 
-QelStyleHelper::ComponentStyle QelStyleHelper::buttonStyle(QelTheme::ButtonKind kind,
-                                                           bool isPlain,
-                                                           QelVisualState state)
+QelStyleHelper::ComponentStyle QelStyleHelper::styleForState(
+    const StateStyleSet &styles,
+    QelVisualState state)
+{
+    switch (state) {
+    case QelVisualState::Hover:
+        return styles.hover;
+    case QelVisualState::Active:
+        return styles.active;
+    case QelVisualState::Focus:
+        return styles.focus;
+    case QelVisualState::Disabled:
+        return styles.disabled;
+    case QelVisualState::Loading:
+        return styles.loading;
+    case QelVisualState::Normal:
+    default:
+        return styles.normal;
+    }
+}
+
+QelStyleHelper::ComponentStyle QelStyleHelper::buttonStyle(
+    QelTheme::ButtonKind kind,
+    bool isPlain,
+    QelVisualState state)
 {
     const QelTheme::ButtonColors colors = QelTheme::buttonColors(kind, isPlain);
 
@@ -38,17 +60,18 @@ QelStyleHelper::ComponentStyle QelStyleHelper::buttonStyle(QelTheme::ButtonKind 
     case QelVisualState::Loading:
         return {colors.disabled.background, colors.disabled.text, colors.disabled.border};
     case QelVisualState::Active:
-        return {colors.hover.background, colors.hover.text, colors.hover.border};
     case QelVisualState::Hover:
-        return {colors.hover.background, colors.hover.text, colors.hover.border};
     case QelVisualState::Focus:
+        return {colors.hover.background, colors.hover.text, colors.hover.border};
     case QelVisualState::Normal:
     default:
         return {colors.normal.background, colors.normal.text, colors.normal.border};
     }
 }
 
-QelStyleHelper::StateStyleSet QelStyleHelper::buttonStateStyles(QelTheme::ButtonKind kind, bool isPlain)
+QelStyleHelper::StateStyleSet QelStyleHelper::buttonStateStyles(
+    QelTheme::ButtonKind kind,
+    bool isPlain)
 {
     return {
         buttonStyle(kind, isPlain, QelVisualState::Normal),
@@ -60,10 +83,11 @@ QelStyleHelper::StateStyleSet QelStyleHelper::buttonStateStyles(QelTheme::Button
     };
 }
 
-QString QelStyleHelper::composeStateStyleSheet(const QString &baseSelector,
-                                               const QString &loadingSelector,
-                                               const StateStyleSet &styles,
-                                               bool disableFocusOutline)
+QString QelStyleHelper::composeStateStyleSheet(
+    const QString &baseSelector,
+    const QString &loadingSelector,
+    const StateStyleSet &styles,
+    bool disableFocusOutline)
 {
     QString style;
     style += QString("%1 { background-color: %2; color: %3; border: 1px solid %4; }")
@@ -97,11 +121,13 @@ QString QelStyleHelper::composeStateStyleSheet(const QString &baseSelector,
                  .arg(styles.disabled.text)
                  .arg(styles.disabled.border);
 
-    style += QString("%1 { background-color: %2; color: %3; border: 1px solid %4; }")
-                 .arg(loadingSelector)
-                 .arg(styles.loading.background)
-                 .arg(styles.loading.text)
-                 .arg(styles.loading.border);
+    if (!loadingSelector.isEmpty()) {
+        style += QString("%1 { background-color: %2; color: %3; border: 1px solid %4; }")
+                     .arg(loadingSelector)
+                     .arg(styles.loading.background)
+                     .arg(styles.loading.text)
+                     .arg(styles.loading.border);
+    }
 
     return style;
 }
@@ -109,7 +135,11 @@ QString QelStyleHelper::composeStateStyleSheet(const QString &baseSelector,
 QString QelStyleHelper::buttonStateStyleSheet(QelTheme::ButtonKind kind, bool isPlain)
 {
     const StateStyleSet styles = buttonStateStyles(kind, isPlain);
-    return composeStateStyleSheet("QPushButton", "QPushButton[qel-loading=\"true\"]", styles, true);
+    return composeStateStyleSheet(
+        "QPushButton",
+        "QPushButton[qel-loading=\"true\"]",
+        styles,
+        true);
 }
 
 } // namespace qel

@@ -1,5 +1,7 @@
 SOURCES += \
-        $$PWD/QelNumberInput.cpp
+    $$PWD/QelNumberInput.cpp
 
 HEADERS += \
-        $$PWD/QelNumberInput.h
+    $$PWD/QelNumberInput.h
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

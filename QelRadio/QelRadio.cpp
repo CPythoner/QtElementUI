@@ -1,6 +1,33 @@
 #include "QelRadio.h"
 
+#include "../QelStyleHelper/QelStyleHelper.h"
+#include "../QelTheme/QelTheme.h"
+
 namespace qel {
+
+namespace {
+
+QelStyleHelper::StateStyleSet radioOuterStateStyles(bool bordered)
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    const QString normalBorder = bordered ? c.borderBase : "transparent";
+    const QString hoverBorder = bordered ? c.primary : "transparent";
+    const QString disabledBorder = bordered ? c.borderLighter : "transparent";
+    const QString normalBackground = bordered ? c.fillBlank : "transparent";
+    const QString disabledBackground = bordered ? c.fillLight : "transparent";
+
+    return {
+        {normalBackground, c.textRegular, normalBorder},
+        {normalBackground, c.primary, hoverBorder},
+        {normalBackground, c.primary, hoverBorder},
+        {normalBackground, c.primary, hoverBorder},
+        {disabledBackground, c.textPlaceholder, disabledBorder},
+        {disabledBackground, c.textPlaceholder, disabledBorder}
+    };
+}
+
+} // namespace
 
 QelRadio::QelRadio(const QString &text, QWidget *parent)
     : QelRadio(text, false, false, false, Size::Default, StyleType::Default, parent)
@@ -73,11 +100,6 @@ void QelRadio::applyStyle()
         horizontalPadding = 18;
         break;
     case Size::Default:
-        indicatorSize = 14;
-        fontSize = 14;
-        spacing = 8;
-        minHeight = 32;
-        horizontalPadding = 14;
         break;
     case Size::Small:
         indicatorSize = 12;
@@ -88,98 +110,82 @@ void QelRadio::applyStyle()
         break;
     }
 
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+    const bool bordered = border_ || styleType_ == StyleType::Button;
+
+    QString style = QelStyleHelper::composeStateStyleSheet(
+        "QRadioButton",
+        QString(),
+        radioOuterStateStyles(bordered),
+        true);
+
+    style += QString(
+        "QRadioButton {"
+        " font-size: %1px;"
+        " min-height: %2px;"
+        " padding-left: %3px;"
+        " padding-right: %3px;"
+        " border-radius: 4px;"
+        "}"
+    ).arg(fontSize).arg(minHeight).arg(horizontalPadding);
+
     if (styleType_ == StyleType::Button) {
-        setStyleSheet(QString(
-            "QRadioButton {"
-            " color: #606266;"
-            " font-size: %1px;"
-            " min-height: %2px;"
-            " padding-left: %3px;"
-            " padding-right: %3px;"
-            " border: 1px solid #DCDFE6;"
-            " border-radius: 4px;"
-            " background: #FFFFFF;"
-            "}"
+        style += QString(
             "QRadioButton::indicator { width: 0px; height: 0px; }"
-            "QRadioButton:hover {"
-            " color: #409EFF;"
-            " border-color: #409EFF;"
-            "}"
             "QRadioButton:checked {"
-            " color: #409EFF;"
-            " border-color: #409EFF;"
-            " background: #ECF5FF;"
+            " color: %1;"
+            " border-color: %1;"
+            " background: %2;"
             "}"
-            "QRadioButton:disabled {"
-            " color: #C0C4CC;"
-            " border-color: #EBEEF5;"
-            " background: #F5F7FA;"
-            "}"
-        ).arg(fontSize).arg(minHeight).arg(horizontalPadding));
+        ).arg(c.primary, c.primaryLight);
+
+        setStyleSheet(style);
         return;
     }
 
-    QString controlStyle;
-    if (border_) {
-        controlStyle = QString(
-            " border: 1px solid #DCDFE6;"
-            " border-radius: 4px;"
-            " background: #FFFFFF;"
-            " min-height: %1px;"
-            " padding-left: %2px;"
-            " padding-right: %2px;"
-        ).arg(minHeight).arg(horizontalPadding);
-    }
-
-    setStyleSheet(QString(
-        "QRadioButton {"
-        " color: #606266;"
-        " spacing: %1px;"
-        " font-size: %2px;"
+    style += QString(
+        "QRadioButton { spacing: %1px; }"
+        "QRadioButton:checked {"
+        " color: %2;"
         "%3"
         "}"
-        "QRadioButton:hover {"
-        " color: #409EFF;"
-        "%4"
-        "}"
-        "QRadioButton:checked {"
-        " color: #409EFF;"
-        "%5"
-        "}"
-        "QRadioButton:disabled {"
-        " color: #C0C4CC;"
-        "%6"
-        "}"
         "QRadioButton::indicator {"
-        " width: %7px;"
-        " height: %7px;"
-        " border-radius: %8px;"
-        " border: 1px solid #DCDFE6;"
-        " background: #FFFFFF;"
+        " width: %4px;"
+        " height: %4px;"
+        " border-radius: %5px;"
+        " border: 1px solid %6;"
+        " background: %7;"
         "}"
         "QRadioButton::indicator:hover {"
-        " border: 1px solid #409EFF;"
+        " border: 1px solid %2;"
         "}"
         "QRadioButton::indicator:checked {"
-        " border: 5px solid #409EFF;"
-        " background: #FFFFFF;"
+        " border: 5px solid %2;"
+        " background: %7;"
         "}"
         "QRadioButton::indicator:checked:disabled {"
-        " border: 5px solid #B3D8FF;"
+        " border: 5px solid %8;"
         "}"
         "QRadioButton::indicator:disabled {"
-        " border: 1px solid #E4E7ED;"
-        " background: #F5F7FA;"
+        " border: 1px solid %9;"
+        " background: %10;"
         "}"
     )
         .arg(spacing)
-        .arg(fontSize)
-        .arg(controlStyle)
-        .arg(border_ ? " border-color: #409EFF;" : "")
-        .arg(border_ ? " border-color: #409EFF; background: #ECF5FF;" : "")
-        .arg(border_ ? " border-color: #EBEEF5; background: #F5F7FA;" : "")
+        .arg(c.primary)
+        .arg(border_
+                 ? QString(" border-color: %1; background: %2;")
+                       .arg(c.primary, c.primaryLight)
+                 : QString())
         .arg(indicatorSize)
-        .arg(indicatorSize / 2));
+        .arg(indicatorSize / 2)
+        .arg(c.borderBase)
+        .arg(c.fillBlank)
+        .arg(c.primaryDisabled)
+        .arg(c.borderLight)
+        .arg(c.fillLight);
+
+    setStyleSheet(style);
 }
 
 } // namespace qel

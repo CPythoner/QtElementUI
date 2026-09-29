@@ -3,3 +3,5 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/QelRadio.h
+
+include($$PWD/../QelStyleHelper/QelStyleHelper.pri)

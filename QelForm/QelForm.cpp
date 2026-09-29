@@ -1,13 +1,8 @@
 #include "QelForm.h"
 
+#include "../QelTheme/QelTheme.h"
+
 namespace qel {
-
-namespace {
-
-const char *kRegularTextColor = "#606266";
-const char *kDangerColor = "#F56C6C";
-
-} // namespace
 
 QelFormItem::QelFormItem(const QString &label, QWidget *parent)
     : QWidget(parent)
@@ -26,11 +21,13 @@ QelFormItem::QelFormItem(const QString &label, QWidget *parent)
     layout_->setHorizontalSpacing(12);
     layout_->setVerticalSpacing(4);
 
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
     labelWidget_->setStyleSheet(
-        QString("color: %1; font-size: 14px;").arg(kRegularTextColor));
+        QString("color: %1; font-size: 14px;").arg(c.textRegular));
 
     errorWidget_->setStyleSheet(
-        QString("color: %1; font-size: 12px;").arg(kDangerColor));
+        QString("color: %1; font-size: 12px;").arg(c.danger));
     errorWidget_->setWordWrap(true);
     errorWidget_->hide();
 
@@ -271,11 +268,13 @@ void QelFormItem::rebuildLayout()
 
 void QelFormItem::updateLabelText()
 {
+    const QelTheme::ColorTokens &c = QelTheme::colors();
     const QString escapedLabel = label_.toHtmlEscaped();
+
     if (isRequired()) {
         labelWidget_->setText(
             QString("<span style=\"color:%1\">*</span> %2")
-                .arg(kDangerColor, escapedLabel));
+                .arg(c.danger, escapedLabel));
     } else {
         labelWidget_->setText(escapedLabel);
     }

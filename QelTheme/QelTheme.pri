@@ -1,5 +1,9 @@
-SOURCES += \
-    $$PWD/QelTheme.cpp
+isEmpty(QEL_THEME_PRI_INCLUDED) {
+    QEL_THEME_PRI_INCLUDED = 1
 
-HEADERS += \
-    $$PWD/QelTheme.h
+    SOURCES += \
+        $$PWD/QelTheme.cpp
+
+    HEADERS += \
+        $$PWD/QelTheme.h
+}

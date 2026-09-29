@@ -1,9 +1,44 @@
 #include "QelSwitch.h"
 
+#include "../QelStyleHelper/QelStyleHelper.h"
+#include "../QelTheme/QelTheme.h"
+
 #include <QMouseEvent>
 #include <QPainter>
 
 namespace qel {
+
+namespace {
+
+QelStyleHelper::StateStyleSet checkedTrackStyles()
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    return {
+        {c.primary, c.fillBlank, c.primary},
+        {c.primaryHover, c.fillBlank, c.primaryHover},
+        {c.primaryHover, c.fillBlank, c.primaryHover},
+        {c.primaryHover, c.fillBlank, c.primary},
+        {c.primaryDisabled, c.fillBlank, c.primaryDisabled},
+        {c.primaryDisabled, c.fillBlank, c.primaryDisabled}
+    };
+}
+
+QelStyleHelper::StateStyleSet uncheckedTrackStyles()
+{
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    return {
+        {c.borderBase, c.fillBlank, c.borderBase},
+        {c.textPlaceholder, c.fillBlank, c.textPlaceholder},
+        {c.textPlaceholder, c.fillBlank, c.textPlaceholder},
+        {c.textPlaceholder, c.fillBlank, c.primary},
+        {c.borderLight, c.fillBlank, c.borderLight},
+        {c.borderLight, c.fillBlank, c.borderLight}
+    };
+}
+
+} // namespace
 
 QelSwitch::QelSwitch(QWidget *parent)
     : QWidget(parent),
@@ -78,22 +113,33 @@ void QelSwitch::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    const QColor activeColor = isEnabled() ? QColor("#409EFF") : QColor("#A0CFFF");
-    const QColor inactiveColor = isEnabled() ? QColor("#DCDFE6") : QColor("#E4E7ED");
+    QelStateContext context;
+    context.enabled = isEnabled();
+    context.hovered = underMouse();
+    context.focused = hasFocus();
 
-    QColor bgColor = checked_ ? activeColor : inactiveColor;
-    if (underMouse() && isEnabled()) {
-        bgColor = checked_ ? QColor("#66B1FF") : QColor("#C0C4CC");
+    const QelVisualState state = QelStyleHelper::resolveState(context);
+    const QelStyleHelper::StateStyleSet styles =
+        checked_ ? checkedTrackStyles() : uncheckedTrackStyles();
+    const QelStyleHelper::ComponentStyle visual =
+        QelStyleHelper::styleForState(styles, state);
+
+    const QelTheme::ColorTokens &c = QelTheme::colors();
+
+    QRectF trackRect(0.5, 0.5, controlWidth_ - 1.0, controlHeight_ - 1.0);
+    if (hasFocus() && isEnabled()) {
+        painter.setPen(QPen(QColor(c.primary), 1.0));
+    } else {
+        painter.setPen(Qt::NoPen);
     }
 
-    QRectF trackRect(0, 0, controlWidth_, controlHeight_);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(bgColor);
+    painter.setBrush(QColor(visual.background));
     painter.drawRoundedRect(trackRect, controlHeight_ / 2.0, controlHeight_ / 2.0);
 
     const qreal top = (controlHeight_ - knobDiameter_) / 2.0;
-    QRectF knobRect(offset_, top, knobDiameter_, knobDiameter_);
-    painter.setBrush(Qt::white);
+    const QRectF knobRect(offset_, top, knobDiameter_, knobDiameter_);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor(c.fillBlank));
     painter.drawEllipse(knobRect);
 }
 
