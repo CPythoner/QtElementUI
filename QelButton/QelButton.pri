@@ -2,7 +2,8 @@ SOURCES += \
         $$PWD/QelButton.cpp
 
 HEADERS += \
-        $$PWD/QelButton.h
+        $$PWD/QelButton.h \
+        $$PWD/../QelCommon/QelControlTypes.h
 
 include($$PWD/../QelTheme/QelTheme.pri)
 
