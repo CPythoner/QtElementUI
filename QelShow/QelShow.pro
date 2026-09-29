@@ -54,3 +54,5 @@ include($$PWD/../QelForm/QelForm.pri)
 include($$PWD/../QelTooltip/QelTooltip.pri)
 
 include($$PWD/../QelTag/QelTag.pri)
+
+include($$PWD/../QelBadge/QelBadge.pri)

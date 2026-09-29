@@ -12,5 +12,6 @@ SUBDIRS += \
     QelForm \
     QelTooltip \
     QelTag \
+    QelBadge \
     QelShow
 
