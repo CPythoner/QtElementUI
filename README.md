@@ -18,6 +18,7 @@
     - [QelTooltip 示例](#qeltooltip-示例)
     - [QelTag 示例](#qeltag-示例)
     - [QelBadge 示例](#qelbadge-示例)
+    - [QelProgress 示例](#qelprogress-示例)
   - [自定义](#自定义)
 
 # QelElementUI 项目
@@ -61,7 +62,7 @@ include($$PWD/../QelButton/QelButton.pri)
 
 ### QelShow 功能
 
-- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip`、`QelTag`、`QelBadge` 等。
+- 展示所有 `QelElementUI` 组件的使用示例，包括 `QelIcon`、`QelButton`、`QelNumberInput`、`QelInput`、`QelSelect`、`QelCheckbox`、`QelRadio`、`QelSwitch`、`QelForm`、`QelTooltip`、`QelTag`、`QelBadge`、`QelProgress` 等。
 
 - 通过左侧分类树（如“基础组件”“表单组件”）选择不同组件，右侧展示对应测试界面。
 
@@ -273,3 +274,28 @@ and offset semantics.
 
 `QelShow` mirrors the official Element Plus Badge examples: Basic, Max value,
 Custom content, Dot and Offset.
+
+
+### QelProgress 示例
+
+```cpp
+#include "QelProgress.h"
+
+qel::QelProgress *progress = new qel::QelProgress(this);
+progress->setPercentage(70);
+progress->setStrokeWidth(12);
+progress->setStatus(qel::QelProgress::Status::Success);
+```
+
+`QelProgress` aligns with Element Plus 2.14.6 Progress semantics:
+`type`, `percentage`, `status`, `indeterminate`, `duration`,
+`stroke-width`, `stroke-linecap`, `text-inside`, `width`,
+`show-text`, `color`, `striped`, `striped-flow`, and `format`.
+
+Color supports a fixed color, ordered percentage thresholds, or a function.
+The Element Plus scoped default slot maps to `setContentRenderer()`, which
+receives the current percentage and returns a QWidget.
+
+`QelShow` mirrors all eight official Element Plus Progress examples:
+Linear, Internal percentage, Custom color, Customized content, Circular,
+Dashboard, Indeterminate, and Striped progress.

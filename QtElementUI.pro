@@ -13,5 +13,6 @@ SUBDIRS += \
     QelTooltip \
     QelTag \
     QelBadge \
+    QelProgress \
     QelShow
 
