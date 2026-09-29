@@ -9,5 +9,6 @@ SUBDIRS += \
     QelCheckbox \
     QelRadio \
     QelSwitch \
+    QelForm \
     QelShow
 

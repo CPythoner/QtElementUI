@@ -50,14 +50,17 @@ void QelSelect::clearOptions()
 
 void QelSelect::setCurrentValue(const QVariant &value)
 {
+    if (!value.isValid() || value.toString().isEmpty()) {
+        comboBox_->setCurrentIndex(-1);
+        return;
+    }
+
     int index = comboBox_->findData(value);
     if (index < 0) {
         index = comboBox_->findText(value.toString());
     }
 
-    if (index >= 0) {
-        comboBox_->setCurrentIndex(index);
-    }
+    comboBox_->setCurrentIndex(index);
 }
 
 QVariant QelSelect::currentValue() const
@@ -79,6 +82,7 @@ void QelSelect::setPlaceholder(const QString &placeholder)
     comboBox_->lineEdit()->setPlaceholderText(placeholder);
     comboBox_->setEditable(false);
 #endif
+    comboBox_->setCurrentIndex(-1);
 }
 
 void QelSelect::setDisabled(bool disabled)
