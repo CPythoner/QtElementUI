@@ -17,6 +17,7 @@
 #include "../QelTooltip/QelTooltipTester.h"
 #include "../QelTag/QelTagTester.h"
 #include "../QelBadge/QelBadgeTester.h"
+#include "../QelProgress/QelProgressTester.h"
 
 namespace Ui {
 class MainWindow;
@@ -50,6 +51,7 @@ private:
     QelTooltipTester *pQelTooltipTester = nullptr;
     QelTagTester *pQelTagTester = nullptr;
     QelBadgeTester *pQelBadgeTester = nullptr;
+    QelProgressTester *pQelProgressTester = nullptr;
 };
 
 #endif // MAINWINDOW_H
